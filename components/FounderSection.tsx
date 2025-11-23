@@ -9,7 +9,7 @@ export default function FounderSection() {
         <div className="md:w-2/3">
           <h3 className="heading-font text-2xl md:text-3xl font-extrabold text-black mb-4">
             {/* Founder: <span className="text-gray-700">Ashton Woods</span> */}
-            FOUNDER: <span className="text-gray-700">ASHTON WOODS</span>
+            FOUNDER: ASHTON WOODS</span>
           </h3>
 
           <p className="normal-font text-gray-700 text-base md:text-lg">
