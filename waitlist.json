@@ -1,1 +1,23 @@
-[]
+[
+  {
+    "id": "waitlist_1763794639095_ugygqymco",
+    "timestamp": "2025-11-22T06:57:19.095Z",
+    "goal": [
+      "Fat Loss (cut)"
+    ],
+    "age": "Under 18",
+    "guardian": "Yes",
+    "gender": "Male",
+    "challenges": "example",
+    "seriousness": "5",
+    "commitment": "Yes I'm ready to commit",
+    "experience": "example",
+    "name": "example example",
+    "firstName": "example",
+    "lastName": "example",
+    "work": "example",
+    "phone": "+923102552345",
+    "email": "example@gmail.com",
+    "instagram": "example"
+  }
+]

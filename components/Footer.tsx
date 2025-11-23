@@ -22,7 +22,7 @@ export default function Footer() {
         <div className="flex items-center gap-3">
           <div className="relative flex items-center justify-center">
             <img
-              src="/logo.png"
+              src="/logo-m.png"
               alt="AW Logo"
               className="w-16 h-16 md:w-20 md:h-20 object-contain"
               onError={(e) => {
@@ -38,14 +38,16 @@ export default function Footer() {
 
           <div className="text-white">
             <div className="text-2xl font-bold whitespace-nowrap heading-font">
-              Sculpt <br /> By Ashton
+              {/* Sculpt <br /> By Ashton */}
+              SCULPT <br /> BY ASHTON
             </div>
           </div>
         </div>
       </div>
 <br /><br />
             <h3 className="mt-8 heading-font text-2xl md:text-3xl lg:text-4xl font-extrabold text-white max-w-lg">
-              Step into Your Evolution
+              {/* Step into Your Evolution */}
+              STEP INTO YOUR EVOLUTION
             </h3>
 
             <div className="mt-8">

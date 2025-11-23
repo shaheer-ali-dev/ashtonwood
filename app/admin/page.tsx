@@ -66,7 +66,7 @@ export default function AdminPage() {
 
       const data = await response.json();
 
-      if (response.ok && data.success) {
+      if (response.ok) {
         setIsAuthenticated(true);
       } else {
         setLoginError(data.error || 'Invalid credentials');
@@ -95,12 +95,11 @@ export default function AdminPage() {
   const fetchWaitlistEntries = async () => {
     setLoading(true);
     try {
-      const response = await fetch('/api/admin/waitlist');
+      const response = await fetch('/api/waitlist/entries');
       const data = await response.json();
-
-      if (response.ok && data.success) {
-        setWaitlistEntries(data.entries);
-      }
+      // console.log(data)
+      if (response.ok) {
+setWaitlistEntries(data.entries);   console.log(data.entries)    }
     } catch (error) {
       console.error('Error fetching waitlist entries:', error);
     } finally {

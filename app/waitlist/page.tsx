@@ -561,7 +561,7 @@ export default function WaitlistPage() {
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Header with spots left */}
         <div className="text-center mb-8">
-          <div className="inline-block bg-[#FF5A8A] text-white px-6 py-3 rounded-full font-bold text-lg mb-4">
+          <div className="inline-block bg-black text-white px-6 py-3 rounded-full font-bold text-lg mb-4">
             🔥 EXCLUSIVE SPECIAL OFFER 🔥
           </div>
           {spotsLeft !== null && (

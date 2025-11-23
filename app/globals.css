@@ -21,6 +21,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+
 /* Ubuntu Font Classes */
 .normal-font {
 font-family: "Lato", sans-serif;
@@ -30,7 +31,8 @@ font-family: "Lato", sans-serif;
 
 /* Bree Serif class to apply where needed */
 .heading-font {
-  font-family: "Luckiest Guy", serif;
-  font-weight: 400;
+  font-family: "Poppins", system-ui;
+  font-weight: 700;
   font-style: normal;
 }
+

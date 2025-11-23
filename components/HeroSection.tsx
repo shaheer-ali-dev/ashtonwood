@@ -10,22 +10,23 @@ export default function HeroSection() {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
       {/* Background Image */}
       <div
-        className="absolute inset-0 z-0 bg-cover bg-center"
-        style={{
-          backgroundImage:
-            "url('https://cdn.prod.website-files.com/6773cb824c57db1c0a15b59d%2F6773cd7d02096e83a1e56f2c_looped%20hero%20vid-poster-00001.jpg')",
-        }}
-      ></div>
+  className="absolute inset-0 z-0 bg-cover bg-center opacity-50"
+  style={{
+    backgroundImage:
+      "url('https://cdn.prod.website-files.com/6773cb824c57db1c0a15b59d%2F6773cd7d02096e83a1e56f2c_looped%20hero%20vid-poster-00001.jpg')",
+  }}
+></div>
+
 
       {/* Optional Overlay for text readability */}
-      <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+      <div className="absolute inset-0"></div>
 
       {/* Logo - Top Left */}
       <div className="absolute top-8 left-8 z-20">
         <div className="flex items-center gap-3">
           <div className="relative flex items-center justify-center">
             <img
-              src="/logo.png"
+              src="/logo-m.png"
               alt="AW Logo"
               className="w-16 h-16 md:w-20 md:h-20 object-contain"
               onError={(e) => {
@@ -34,14 +35,13 @@ export default function HeroSection() {
                 if (placeholder) placeholder.classList.remove('hidden')
               }}
             />
-            <div className="hidden absolute inset-0 bg-transparent text-white flex items-center justify-center font-bold text-lg rounded">
-              AW
-            </div>
+            
           </div>
 
           <div className="text-white">
             <div className="text-2xl font-bold whitespace-nowrap heading-font">
-              Sculpt <br /> By Ashton
+              SCULPT <br /> BY ASHTON
+              {/* Sculpt <br /> By Ashton */}
             </div>
           </div>
         </div>
@@ -56,14 +56,16 @@ export default function HeroSection() {
                 className="font-bold text-white heading-font whitespace-nowrap"
                 style={{ fontSize: 'clamp(2.25rem, 6vw, 4.5rem)', lineHeight: 1 }}
               >
-                Average is a habit.
+                {/* Average is a habit. */}
+                AVERAGE IS A HABIT
               </div>
 
               <div
                 className="font-bold mt-3 text-white heading-font whitespace-nowrap"
                 style={{ fontSize: 'clamp(2rem, 6vw, 4rem)', lineHeight: 1 }}
               >
-               Greatness is a decision.
+               {/* Greatness is a decision. */}
+                GREATNESS IS A DECISION
               </div>
             </div>
           </header>
@@ -72,25 +74,17 @@ export default function HeroSection() {
             Sculpted by Ashton isn't just about building a powerful physique. It's a mindset. It's understanding that your body is a work of art in every single way. And this piece of art is built on the foundation of discipline, self-respect, the relentless, and endless drive to evolve. This is about becoming the version of yourself that follows through, that leads, that shows up with intention every single day. I'm here to guide that transformation with fitness and nutrition tailored specifically to YOU, helping you step into your strongest, most unstoppable self.
           </p>
 
-       <button
+      <button
   onClick={handleSignUp}
-  className="bg-white border border-black text-black px-10 py-4 rounded-full font-bold text-lg 
-             hover:bg-black hover:text-white transition-all shadow-xl 
+  className="bg-black border border-black text-white px-10 py-4 rounded-full font-bold text-lg 
+             shadow-md hover:shadow-2xl transition-shadow duration-300 ease-in-out
              transform hover:scale-105 flex items-center gap-2 group"
 >
   SIGN UP NOW
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-    strokeWidth="2.2"
-    stroke="black"
-    className="w-6 h-6 transition-all group-hover:stroke-white"
-  >
-    <circle cx="12" cy="12" r="9"></circle>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M10 8l4 4-4 4" />
-  </svg>
+  <img src="https://cdn.prod.website-files.com/681907465c74d32f50b71064/681907465c74d32f50b71077_arrow-circle-broken-right.svg" alt="" />
 </button>
+
+
 
 
         </div>

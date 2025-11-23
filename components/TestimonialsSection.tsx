@@ -82,7 +82,8 @@ export default function TestimonialsSection() {
     >
       <div className="max-w-7xl mx-auto px-6">
         <h2 className="text-center heading-font text-2xl md:text-3xl font-extrabold text-black mb-3">
-          Baddie Community 5 Star <span className="font-normal">Reviews and Transformations</span>
+          {/* Sculpt Community 5 Star <span className="font-normal">Reviews and Transformations</span> */}
+          SCULPT COMMUNITY 5 STAR <span className="font-normal">REVIEWS AND TRANSFORMATIONS</span>
         </h2>
 
         <div className="flex justify-center mb-6">
@@ -165,7 +166,8 @@ export default function TestimonialsSection() {
         </div>
 
         {/* Transformations carousel */}
-        <h3 className="heading-font text-center text-black text-xl mb-6">Transformations:</h3>
+        <h3 className="heading-font text-center text-black text-xl mb-6">TRANSFORMATION:</h3>
+        
 
         <div className="flex flex-col items-center">
           <div className="w-full md:w-3/4 overflow-hidden">

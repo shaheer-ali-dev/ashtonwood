@@ -73,11 +73,11 @@ export default function AppAccessSection() {
           {/* Right side - Content */}
           <div className="text-center md:text-left order-1 md:order-2 space-y-6 px-4">
             {/* small pill logo */}
-            <div className="flex items-center gap-4 justify-center md:justify-start">
-              <div className="w-14 h-14 rounded-lg bg-white border border-pink-200 shadow-sm flex items-center justify-center">
+            <div className="flex items-center justify-center md:justify-start">
+              <div className="w-24 h-24 rounded-lg bg-white flex items-center justify-center">
                 {/* simple letter/logo fallback */}
  <img
-              src="/logo.png"
+              src="/logo.jpeg"
               alt="AW Logo"
               className="w-16 h-16 md:w-20 md:h-20 object-contain"
               onError={(e) => {
@@ -89,11 +89,12 @@ export default function AppAccessSection() {
             <div className="hidden absolute inset-0 bg-transparent text-white flex items-center justify-center font-bold text-lg rounded">
               AW
             </div>              </div>
-              <span className="text-xs tracking-widest normal-font text-gray-500 uppercase">Sculpt App By Ashton</span>
+              <span className="text-xs tracking-widest normal-font text-gray-500 uppercase heading-font">Sculpt App By Ashton</span>
             </div>
 
             <h2 className="text-3xl md:text-4xl heading-font lg:text-5xl font-extrabold text-gray-900 leading-tight">
-Claim the confidence that already belongs to you              <br />
+{/* Claim the confidence that already belongs to you              <br /> */}
+CLAIM THE CONFIDENCE THAT ALREADY BELONGS TO YOU
             </h2>
 
             <p className="text-gray-600 normal-font max-w-xl mx-auto md:mx-0">
@@ -107,7 +108,7 @@ Claim the confidence that already belongs to you              <br />
                 <span>GET ACCESS TO MY APP</span>
                 <span className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
                   {/* right arrow */}
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-black" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L13.586 11H3a1 1 0 110-2h10.586l-3.293-3.293a1 1 0 111.414-1.414l5 5a1 1 0 01.083 1.32l-.083.094-5 5a1 1 0 01-1.414 0z" clipRule="evenodd" />
                   </svg>
                 </span>

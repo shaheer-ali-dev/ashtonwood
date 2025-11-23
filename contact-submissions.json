@@ -1,1 +1,12 @@
-[]
+[
+  {
+    "id": "1763794666359",
+    "firstName": "example",
+    "lastName": "example",
+    "email": "example@gmail.com",
+    "phone": "example",
+    "topic": "Partnership",
+    "message": "example",
+    "submittedAt": "2025-11-22T06:57:46.359Z"
+  }
+]
