@@ -447,7 +447,7 @@ export default function QuestionnaireSection() {
         </div>
 
         {/* Main heading */}
-        <h2 className="text-4xl heading-font md:text-5xl font-bold text-[#5A5A5A] mb-6 text-center">
+        <h2 className="text-4xl heading-font md:text-5xl font-bold text-black mb-6 text-center">
           {/* Fill this out to get started! */}
           FILL THIS OUT TO GET STARTED!
         </h2>
@@ -504,3 +504,4 @@ export default function QuestionnaireSection() {
     </section>
   )
 }
+
