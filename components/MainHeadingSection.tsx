@@ -52,13 +52,13 @@ export default function MainHeadingSection() {
 
 
 <p className="text-lg md:text-xl normal-font md:leading-[25px] text-gray-600 leading-[90px] max-w-xl">
-    This isn’t just about working out.
-    This is about stepping into the <span className="block h-[15px]"></span> strongest, most confident version of yourself. 
-    My 1:1 coaching <span className="block h-[15px]"></span> program is built to help you lift heavy, sharpen your mindset, 
-    and <span className="block h-[15px]"></span> build the kind of discipline that turns evolution into a lifestyle. <span className="block h-[15px]"></span>
-    With customized training, tailored nutrition, and real support, <span className="block h-[15px]"></span> you’ll develop 
-    the strength — both physically and mentally — to<span className="block h-[15px]"></span> handle anything life throws at you.
-    Ready to lock in and become<span className="block h-[15px]"></span> who you were truly meant to be?
+    This isn’t just about working out.<span className="block h-[15px]"></span>
+    This is about stepping into the  <span className="block h-[15px]"></span> strongest, most confident version of <span className="block h-[15px]"></span>yourself. 
+    My 1:1 coaching   program is<span className="block h-[15px]"></span> built to help you lift heavy, sharpen<span className="block h-[15px]"></span> your mindset, 
+    and   build the kind of<span className="block h-[15px]"></span> discipline that turns evolution into a <span className="block h-[15px]"></span>lifestyle.  
+    With customized training, <span className="block h-[15px]"></span>tailored nutrition, and real support, <span className="block h-[15px]"></span>  you’ll develop 
+    the strength — both<span className="block h-[15px]"></span> physically and mentally — to  handle<span className="block h-[15px]"></span> anything life throws at you.
+    Ready to<span className="block h-[15px]"></span> lock in and become  who you were truly<span className="block h-[15px]"></span> meant to be?
   </p>
 
   <div>

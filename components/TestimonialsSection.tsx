@@ -6,22 +6,10 @@ export default function TestimonialsSection() {
   const testimonials = [
     {
       quote:
-        "5 inches already!! I'm crying! This wouldn't be possible if it wasn't for your constant support! This is only the beginning",
-      author: 'Ashley',
+        "EXAMPLE",
+      author: 'example',
     },
-    {
-      quote:
-        "Wait those progress photos are actually insane — it's so easy to forget all the work I've put in, but it's really about the small wins that add up to the bigger outcome!",
-      author: 'Laurie',
-    },
-    {
-      quote: "I'm so glad I committed — the accountability and structure changed everything for me.",
-      author: 'Maya',
-    },
-    {
-      quote: 'The coaching gave me the confidence to push harder and finally see results.',
-      author: 'Sam',
-    },
+    
   ]
 
   const transformations = [
@@ -122,7 +110,7 @@ export default function TestimonialsSection() {
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {slide.map((t, i) => (
-                      <div key={i} className="border border-pink-100 rounded-lg p-6 bg-white">
+                      <div key={i} className="border border-black rounded-lg p-6 bg-white">
                         <p className="normal-font text-sm text-gray-700 leading-relaxed">"{t.quote}"</p>
                         <p className="normal-font text-right text-xs font-semibold mt-4">- {t.author}</p>
                       </div>
@@ -139,7 +127,7 @@ export default function TestimonialsSection() {
             <button
               onClick={() => setActiveTestimonial((s) => (s - 1 + testimonialSlides.length) % testimonialSlides.length)}
               aria-label="Previous testimonials"
-              className="w-8 h-8 rounded-full bg-pink-100 text-black flex items-center justify-center shadow-sm"
+              className="w-8 h-8 rounded-full bg-black/10 text-black flex items-center justify-center shadow-sm"
             >
               ‹
             </button>
@@ -158,7 +146,7 @@ export default function TestimonialsSection() {
             <button
               onClick={() => setActiveTestimonial((s) => (s + 1) % testimonialSlides.length)}
               aria-label="Next testimonials"
-              className="w-8 h-8 rounded-full bg-pink-100 text-black flex items-center justify-center shadow-sm"
+              className="w-8 h-8 rounded-full bg-black/10 text-black flex items-center justify-center shadow-sm"
             >
               ›
             </button>
@@ -184,7 +172,7 @@ export default function TestimonialsSection() {
                     {slide.map((src, i) => (
                       <div
                         key={i}
-                        className="rounded-lg overflow-hidden border border-pink-100 shadow-sm bg-white h-48 flex items-center justify-center"
+                        className="rounded-lg overflow-hidden border border-black/10 shadow-sm bg-white h-48 flex items-center justify-center"
                       >
                         <img
                           src={src}
@@ -201,7 +189,7 @@ export default function TestimonialsSection() {
                     {/* fill empty slots if a slide has fewer than 3 images to keep grid consistent */}
                     {slide.length < 3 &&
                       Array.from({ length: 3 - slide.length }).map((_, idx) => (
-                        <div key={`empty-${idx}`} className="rounded-lg border border-pink-100 h-48 bg-white" />
+                        <div key={`empty-${idx}`} className="rounded-lg border border-black/10 h-48 bg-white" />
                       ))}
                   </div>
                 </div>
@@ -213,7 +201,7 @@ export default function TestimonialsSection() {
             <button
               onClick={() => setActiveTransform((s) => (s - 1 + transformSlides.length) % transformSlides.length)}
               aria-label="Previous transformations"
-              className="w-8 h-8 rounded-full bg-pink-100 text-black flex items-center justify-center shadow-sm"
+              className="w-8 h-8 rounded-full bg-black/10 text-black flex items-center justify-center shadow-sm"
             >
               ‹
             </button>
@@ -232,7 +220,7 @@ export default function TestimonialsSection() {
             <button
               onClick={() => setActiveTransform((s) => (s + 1) % transformSlides.length)}
               aria-label="Next transformations"
-              className="w-8 h-8 rounded-full bg-pink-100 text-black flex items-center justify-center shadow-sm"
+              className="w-8 h-8 rounded-full bg-black/10 text-black flex items-center justify-center shadow-sm"
             >
               ›
             </button>
