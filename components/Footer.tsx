@@ -53,11 +53,11 @@ export default function Footer() {
             <div className="mt-8">
               <button
                 onClick={handleSignUp}
-                className="inline-flex items-center gap-4 bg-gray-900 text-white px-6 py-3 rounded-full font-semibold shadow-md hover:shadow-lg transition"
+                className="inline-flex items-center gap-4 bg-white text-black px-6 py-3 rounded-full font-semibold shadow-md hover:shadow-lg transition"
               >
                 <span>SIGN UP NOW</span>
-                <span className="bg-white/10 rounded-full p-2 inline-flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+                <span className="bg-black/10 rounded-full p-2 inline-flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-black" viewBox="0 0 20 20" fill="currentColor">
                     <path fillRule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L13.586 11H3a1 1 0 110-2h10.586l-3.293-3.293a1 1 0 111.414-1.414l5 5a1 1 0 01.083 1.32l-.083.094-5 5a1 1 0 01-1.414 0z" clipRule="evenodd" />
                   </svg>
                 </span>

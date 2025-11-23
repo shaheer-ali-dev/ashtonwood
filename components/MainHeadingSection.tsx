@@ -39,24 +39,26 @@ export default function MainHeadingSection() {
 <div className="text-center md:text-left space-y-8 max-w-3xl">
   <h1 className="font-extrabold leading-tight max-w-3xl">
   <span className="text-3xl md:text-4xl heading-font lg:text-5xl text-black block">
-    This isn’t about getting results and falling back,
+    {/* This isn’t about getting results and falling back, */}
+    THIS ISN’T ABOUT GETTING RESULTS AND FALLING BACK,
   </span>
 
 <span className="text-3xl md:text-4xl heading-font lg:text-5xl text-[#5A5A5A] block mt-2">
-    it’s about becoming the person who never does.
+    {/* it’s about becoming the person who never does. */}
+    IT’S ABOUT BECOMING THE PERSON WHO NEVER DOES.
   </span>
 </h1>
 
 
 
-  <p className="text-lg md:text-xl normal-font text-gray-600 leading-relaxed max-w-xl">
+<p className="text-lg md:text-xl normal-font md:leading-[25px] text-gray-600 leading-[90px] max-w-xl">
     This isn’t just about working out.
-    This is about stepping into the strongest, most confident version of yourself. 
-    My 1:1 coaching program is built to help you lift heavy, sharpen your mindset, 
-    and build the kind of discipline that turns evolution into a lifestyle.
-    With customized training, tailored nutrition, and real support, you’ll develop 
-    the strength — both physically and mentally — to handle anything life throws at you.
-    Ready to lock in and become who you were truly meant to be?
+    This is about stepping into the <span className="block h-[15px]"></span> strongest, most confident version of yourself. 
+    My 1:1 coaching <span className="block h-[15px]"></span> program is built to help you lift heavy, sharpen your mindset, 
+    and <span className="block h-[15px]"></span> build the kind of discipline that turns evolution into a lifestyle. <span className="block h-[15px]"></span>
+    With customized training, tailored nutrition, and real support, <span className="block h-[15px]"></span> you’ll develop 
+    the strength — both physically and mentally — to<span className="block h-[15px]"></span> handle anything life throws at you.
+    Ready to lock in and become<span className="block h-[15px]"></span> who you were truly meant to be?
   </p>
 
   <div>

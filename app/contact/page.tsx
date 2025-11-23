@@ -61,9 +61,8 @@ export default function ContactPage() {
   return (
     <div className="w-full flex flex-col items-center py-16 px-4 normal-font">
       {/* Heading */}
-      <h1 className="text-4xl font-extrabold heading-font mb-10 text-center">
-        GET IN TOUCH
-      </h1>
+ <h3 className="heading-font text-2xl md:text-3xl font-extrabold text-black mb-4">        GET IN TOUCH
+      </h3>
 
       {/* Status Message */}
       {status === 'success' && (
@@ -158,7 +157,7 @@ export default function ContactPage() {
           <button
             type="submit"
             disabled={status === 'submitting'}
-            className="px-10 py-3 bg-[#e9a8ad] rounded-full text-white font-semibold hover:opacity-90 transition disabled:opacity-50"
+            className="px-10 py-3 bg-black rounded-full text-white font-semibold hover:opacity-90 transition disabled:opacity-50"
           >
             {status === 'submitting' ? 'SENDING...' : 'SEND MESSAGE'}
           </button>

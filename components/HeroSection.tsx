@@ -71,7 +71,7 @@ export default function HeroSection() {
           </header>
 
           <p className="text-white text-base sm:text-lg md:text-xl mb-8 leading-relaxed normal-font w-full max-w-7xl">
-            Sculpted by Ashton isn't just about building a powerful physique. It's a mindset. It's understanding that your body is a work of art in every single way. And this piece of art is built on the foundation of discipline, self-respect, the relentless, and endless drive to evolve. This is about becoming the version of yourself that follows through, that leads, that shows up with intention every single day. I'm here to guide that transformation with fitness and nutrition tailored specifically to YOU, helping you step into your strongest, most unstoppable self.
+            Sculpted by Ashton isn't just about building a powerful physique. It's a mindset. It's understanding that your body is a <span className="block h-[15px]"></span> work of art in every single way. And this piece of art is built on the foundation of discipline, self-respect, the relentless, <span className="block h-[15px]"></span> and endless drive to evolve. This is about becoming the version of yourself that follows through, that leads, that shows <span className="block h-[15px]"></span> up with intention every single day. I'm here to guide that transformation with fitness and nutrition tailored specifically <span className="block h-[15px]"></span> to YOU, helping you step into your strongest, most unstoppable self.
           </p>
 
       <button

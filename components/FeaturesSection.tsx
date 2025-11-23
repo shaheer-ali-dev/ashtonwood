@@ -18,7 +18,7 @@ export default function FeaturesSection() {
       title: 'Build Strength That Lasts:',
       items: [
         'Customized training plans built to help you lift heavier, grow real muscle, and feel genuinely strong.',
-        'Full access to the Baddies Lift Heavy App so you can track your workouts, nutrition, and progress with ease.',
+        'Full access to the Sculpt By Ashton App so you can track your workouts, nutrition, and progress with ease.',
       ],
     },
     {
@@ -37,7 +37,7 @@ export default function FeaturesSection() {
     },
     {
       title: 'Support You Can Count On:',
-      items: ['Direct 1:1 communication with your coach, Tamara, for accountability, motivation, and real guidance whenever you need it.'],
+      items: ['Direct 1:1 communication with your coach, Ashton, for accountability, motivation, and real guidance whenever you need it.'],
     },
   ]
 
