@@ -45,7 +45,7 @@ export default function Footer() {
         </div>
       </div>
 <br /><br />
-            <h3 className="mt-8 heading-font text-2xl md:text-3xl lg:text-4xl font-extrabold text-white max-w-lg">
+            <h3 className="mt-8 heading-font text-3xl md:text-3xl lg:text-3xl font-extrabold text-white max-w-lg">
               {/* Step into Your Evolution */}
               STEP INTO YOUR EVOLUTION
             </h3>

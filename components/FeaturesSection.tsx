@@ -48,9 +48,9 @@ export default function FeaturesSection() {
 
   return (
     <>
-    <section className="py-20 bg-white">
+    <section className="py-40 bg-white">
       <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-center heading-font text-3xl md:text-4xl font-extrabold text-black-300 mb-10">
+        <h2 className="text-center heading-font text-3xl md:text-3xl font-extrabold text-black-300 mb-10">
           {/* What You'll Gain with 1:1 Coaching: */}
           WHAT YOU'LL GAIN WITH 1:1 COACHING:
         </h2>
@@ -65,7 +65,7 @@ className="relative bg-white rounded-lg border border-black p-6 min-h-[240px] sh
                 <div className="flex-shrink-0">
                   <div className="w-10 h-10 rounded-full flex items-center justify-center mr-4">
                     <svg width="100%" height="100%" viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M19.0127 29.0569L24.0127 34.0569L36.5127 21.5569" stroke="black" strokeWidth="3.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.2627 6.15143C18.9399 4.02431 23.2092 2.80688 27.7627 2.80688C41.5697 2.80688 52.7627 13.9998 52.7627 27.8069C52.7627 41.6139 41.5697 52.8069 27.7627 52.8069C13.9556 52.8069 2.7627 41.6139 2.7627 27.8069C2.7627 23.2534 3.98012 18.9841 6.10725 15.3069" stroke="black" stroke-width="3.75" stroke-linecap="round"/>
+<path d="M19.0127 29.0569L24.0127 34.0569L36.5127 21.5569" stroke="black" strokeWidth="3.75" strokeLinecap="round" strokeLinejoin="round"/><path d="M15.2627 6.15143C18.9399 4.02431 23.2092 2.80688 27.7627 2.80688C41.5697 2.80688 52.7627 13.9998 52.7627 27.8069C52.7627 41.6139 41.5697 52.8069 27.7627 52.8069C13.9556 52.8069 2.7627 41.6139 2.7627 27.8069C2.7627 23.2534 3.98012 18.9841 6.10725 15.3069" stroke="black" strokeWidth="3.75" strokeLinecap="round"/>
 </svg>
                   </div>
                 </div>

@@ -3,14 +3,8 @@
 import { useState, useEffect } from 'react'
 
 const redirectToStripe = () => {
-  // Stripe payment link
   const stripeLink = 'https://buy.stripe.com/cNi4gBcg4gswfwv0bb8N202'
-
-  // Typeform redirect after payment
   const typeformLink = 'https://form.typeform.com/to/t6JbY3W4'
-
-  // Using Stripe Checkout "success_url" trick
-  // If your Stripe link supports appending ?success_url=..., you can do:
   window.location.href = `${stripeLink}?success_url=${encodeURIComponent(typeformLink)}`
 }
 
@@ -32,8 +26,8 @@ const questions: Question[] = [
       'Fat Loss (cut)',
       'Muscle Gain (bulk)',
       'Recomposition (tone)',
-       'Event/Sport-specific training',
-      'Improve flexibility/mobility', 
+      'Event/Sport-specific training',
+      'Improve flexibility/mobility',
     ],
     required: true,
   },
@@ -47,7 +41,7 @@ const questions: Question[] = [
   {
     id: 'guardian',
     type: 'guardian',
-    question: 'If under 18, do you have your guardians permission?',
+    question: 'If under 18, do you have your guardian\'s permission?',
     options: ['Yes', 'No', 'Not under 18'],
     required: true,
   },
@@ -123,7 +117,6 @@ const questions: Question[] = [
   },
 ]
 
-
 export default function QuestionnaireSection() {
   const [currentStep, setCurrentStep] = useState(0)
   const [answers, setAnswers] = useState<Record<string, any>>({})
@@ -132,19 +125,14 @@ export default function QuestionnaireSection() {
   const currentQuestion = questions[currentStep]
   const progress = ((currentStep + 1) / questions.length) * 100
 
-  // Clear errors when step changes
   useEffect(() => {
     setErrors({})
   }, [currentStep])
 
   const handleAnswer = (value: any) => {
-    setAnswers((prev) => ({
-      ...prev,
-      [currentQuestion.id]: value,
-    }))
-    // Clear error when user provides an answer
+    setAnswers(prev => ({ ...prev, [currentQuestion.id]: value }))
     if (errors[currentQuestion.id]) {
-      setErrors((prev) => {
+      setErrors(prev => {
         const newErrors = { ...prev }
         delete newErrors[currentQuestion.id]
         return newErrors
@@ -155,21 +143,16 @@ export default function QuestionnaireSection() {
   const validateCurrentStep = (): boolean => {
     if (currentQuestion.required) {
       if (currentQuestion.type === 'name') {
-        const firstName = answers['firstName']
-        const lastName = answers['lastName']
-        if (!firstName || !lastName) {
-          setErrors((prev) => ({
-            ...prev,
-            [currentQuestion.id]: 'Please fill in all the fields',
-          }))
+        if (!answers['firstName'] || !answers['lastName']) {
+          setErrors(prev => ({ ...prev, [currentQuestion.id]: 'Please fill in all the fields' }))
           return false
         }
       } else {
         const answer = answers[currentQuestion.id]
         if (!answer || (Array.isArray(answer) && answer.length === 0) || (typeof answer === 'string' && answer.trim() === '')) {
-          setErrors((prev) => ({
+          setErrors(prev => ({
             ...prev,
-            [currentQuestion.id]: currentQuestion.type === 'textarea' || currentQuestion.type === 'text' || currentQuestion.type === 'email' || currentQuestion.type === 'phone' || currentQuestion.type === 'scale'
+            [currentQuestion.id]: ['textarea', 'text', 'email', 'phone', 'scale'].includes(currentQuestion.type)
               ? 'Please fill in all the fields'
               : 'Select an option to continue',
           }))
@@ -181,21 +164,51 @@ export default function QuestionnaireSection() {
   }
 
   const handleNext = () => {
-  if (validateCurrentStep()) {
-    if (currentStep < questions.length - 1) {
-      setCurrentStep((prev) => prev + 1)
-    } else {
-      // Last step - redirect to Stripe
-      redirectToStripe()
+    if (validateCurrentStep()) {
+      if (currentStep < questions.length - 1) setCurrentStep(prev => prev + 1)
+      else redirectToStripe()
     }
   }
-}
-
 
   const handlePrevious = () => {
-    if (currentStep > 0) {
-      setCurrentStep((prev) => prev - 1)
+    if (currentStep > 0) setCurrentStep(prev => prev - 1)
+  }
+
+  const renderOptionsHardCoded = () => {
+    if (!currentQuestion.options) return null
+    const options = currentQuestion.options
+    const rows = []
+
+    for (let i = 0; i < options.length; i += 2) {
+      const first = options[i]
+      const second = options[i + 1] // may be undefined
+      rows.push(
+        <div key={i} className={`flex justify-center gap-4 mb-4`}>
+          <button
+            type="button"
+            onClick={() => handleAnswer(first)}
+            className={`px-6 py-4 rounded-lg border-2 text-center font-medium w-[350px] ${
+              answers[currentQuestion.id] === first ? 'bg-white border-[#5A5A5A] text-gray-900' : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
+            }`}
+          >
+            {first}
+          </button>
+          {second && (
+            <button
+              type="button"
+              onClick={() => handleAnswer(second)}
+              className={`px-6 py-4 rounded-lg border-2 text-center font-medium w-[350px] ${
+                answers[currentQuestion.id] === second ? 'bg-white border-[#5A5A5A] text-gray-900' : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
+              }`}
+            >
+              {second}
+            </button>
+          )}
+        </div>
+      )
     }
+
+    return rows
   }
 
   const renderInput = () => {
@@ -220,218 +233,80 @@ export default function QuestionnaireSection() {
         )
 
       case 'name':
-        const firstName = answers['firstName'] || ''
-        const lastName = answers['lastName'] || ''
         return (
           <div className="grid grid-cols-2 gap-4">
             <input
-              key="firstName"
               type="text"
-              value={firstName}
-              onChange={(e) => {
-                const newFirstName = e.target.value
-                setAnswers((prev) => ({ 
-                  ...prev, 
-                  firstName: newFirstName, 
-                  name: `${newFirstName} ${prev.lastName || ''}`.trim() 
-                }))
-                if (errors[currentQuestion.id]) {
-                  setErrors((prev) => {
-                    const newErrors = { ...prev }
-                    delete newErrors[currentQuestion.id]
-                    return newErrors
-                  })
-                }
-              }}
+              value={answers['firstName'] || ''}
+              onChange={e => handleAnswer({ ...answers, firstName: e.target.value })}
               placeholder="First Name"
-              autoComplete="given-name"
               className={`w-full px-4 py-3 rounded-lg border bg-white text-gray-900 ${
                 hasError ? 'border-[#5A5A5A]' : 'border-gray-300'
-              } focus:outline-none focus:ring-2 focus:ring-[#5A5A5A] focus:border-transparent`}
+              }`}
             />
             <input
-              key="lastName"
               type="text"
-              value={lastName}
-              onChange={(e) => {
-                const newLastName = e.target.value
-                setAnswers((prev) => ({ 
-                  ...prev, 
-                  lastName: newLastName, 
-                  name: `${prev.firstName || ''} ${newLastName}`.trim() 
-                }))
-                if (errors[currentQuestion.id]) {
-                  setErrors((prev) => {
-                    const newErrors = { ...prev }
-                    delete newErrors[currentQuestion.id]
-                    return newErrors
-                  })
-                }
-              }}
+              value={answers['lastName'] || ''}
+              onChange={e => handleAnswer({ ...answers, lastName: e.target.value })}
               placeholder="Last Name"
-              autoComplete="family-name"
               className={`w-full px-4 py-3 rounded-lg border bg-white text-gray-900 ${
                 hasError ? 'border-[#5A5A5A]' : 'border-gray-300'
-              } focus:outline-none focus:ring-2 focus:ring-[#5A5A5A] focus:border-transparent`}
+              }`}
             />
           </div>
         )
 
       case 'phone':
-        const phoneValue = value || ''
         return (
           <div className="flex gap-2">
-            <select 
-              className="px-4 py-3 rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-[#5A5A5A] text-gray-900"
-              defaultValue="+92"
-            >
+            <select className="px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900">
               <option value="+92">🇵🇰 +92</option>
               <option value="+1">🇺🇸 +1</option>
               <option value="+44">🇬🇧 +44</option>
             </select>
             <input
-              key={currentQuestion.id}
               type="tel"
-              value={phoneValue}
+              value={value}
               onChange={(e) => handleAnswer(e.target.value)}
               placeholder={currentQuestion.placeholder}
-              autoComplete="tel"
               className={`flex-1 px-4 py-3 rounded-lg border bg-white text-gray-900 ${
                 hasError ? 'border-[#5A5A5A]' : 'border-gray-300'
-              } focus:outline-none focus:ring-2 focus:ring-[#5A5A5A] focus:border-transparent`}
+              }`}
             />
           </div>
         )
 
       case 'textarea':
-  return (
-    <textarea
-      key={currentQuestion.id}
-      value={value}
-      onChange={(e) => handleAnswer(e.target.value)}
-      placeholder={currentQuestion.placeholder}
-      rows={6}
-      className={`w-full px-6 py-5 rounded-lg border bg-white text-gray-900 min-h-[250px] focus:outline-none focus:ring-2 focus:ring-[#5A5A5A] focus:border-transparent resize-y ${
-        hasError ? 'border-[#5A5A5A]' : 'border-gray-300'
-      }`}
-    />
-  )
-
+        return (
+          <textarea
+            value={value}
+            onChange={(e) => handleAnswer(e.target.value)}
+            placeholder={currentQuestion.placeholder}
+            rows={6}
+            className={`w-full px-6 py-5 rounded-lg border bg-white text-gray-900 min-h-[250px] focus:outline-none focus:ring-2 focus:ring-[#5A5A5A] focus:border-transparent resize-y ${
+              hasError ? 'border-[#5A5A5A]' : 'border-gray-300'
+            }`}
+          />
+        )
 
       case 'scale':
-  return (
-    <input
-      key={currentQuestion.id}
-      type="range"
-      min="1"
-      max="10"
-      value={value || 1}
-      onChange={(e) => handleAnswer(e.target.value)}
-      className="w-full h-3 bg-gray-200 rounded-lg accent-[#5A5A5A]"
-    />
-  )
+        return (
+          <input
+            type="range"
+            min="1"
+            max="10"
+            value={value || 1}
+            onChange={(e) => handleAnswer(e.target.value)}
+            className="w-full h-3 bg-gray-200 rounded-lg accent-[#5A5A5A]"
+          />
+        )
 
       case 'multiple-choice':
       case 'age':
-      case 'gender':
       case 'yes-no':
       case 'guardian':
-        const selected = answers[currentQuestion.id] || (currentQuestion.type === 'multiple-choice' ? [] : '')
-        const isSelected = (option: string) => {
-          if (currentQuestion.type === 'multiple-choice') {
-            return Array.isArray(selected) && selected.includes(option)
-          }
-          return selected === option
-        }
-
-        const handleOptionClick = (option: string) => {
-          if (currentQuestion.type === 'multiple-choice') {
-            const current = Array.isArray(selected) ? selected : []
-            if (current.includes(option)) {
-              handleAnswer(current.filter((o) => o !== option))
-            } else {
-              handleAnswer([...current, option])
-            }
-          } else {
-            handleAnswer(option)
-          }
-        }
-
-        const getLayoutClass = () => {
-  // All multiple choice-style questions use a 2-column layout
-  if (
-    currentQuestion.type === 'multiple-choice' ||
-    currentQuestion.type === 'age' ||
-    currentQuestion.type === 'yes-no' ||
-    currentQuestion.type === 'guardian' ||
-    currentQuestion.type === 'gender'
-  ) {
-    return 'grid grid-cols-2 gap-4';
-  }
-  
-  return 'space-y-3';
-};
-
-
-        const getGenderLayout = () => {
-          if (currentQuestion.type === 'gender') {
-            return (
-              <>
-                <div className="grid grid-cols-2 gap-3 mb-3">
-                  {currentQuestion.options?.slice(0, 2).map((option) => (
-                    <button
-                      key={option}
-                      type="button"
-                      onClick={() => handleOptionClick(option)}
-                      className={`w-full px-6 py-4 rounded-lg border-2 text-left transition-all font-medium ${
-                        isSelected(option)
-                          ? 'bg-white border-[#5A5A5A] text-gray-900'
-                          : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
-                      }`}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-                {currentQuestion.options?.slice(2).map((option) => (
-                  <button
-                    key={option}
-                    type="button"
-                    onClick={() => handleOptionClick(option)}
-                    className={`w-full px-6 py-4 rounded-lg border-2 text-left transition-all font-medium ${
-                      isSelected(option)
-                        ? 'bg-white border-[#5A5A5A] text-gray-900'
-                        : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
-                    }`}
-                  >
-                    {option}
-                  </button>
-                ))}
-              </>
-            )
-          }
-          return null
-        }
-
-                return (
-          <div className={getLayoutClass()}>
-            {currentQuestion.options?.map((option) => (
-              <button
-  key={option}
-  type="button"
-  onClick={() => handleOptionClick(option)}
-  className={`w-full min-h-[55px] flex items-center px-6 py-4 rounded-lg border-2 text-left transition-all font-medium ${
-    isSelected(option)
-      ? 'bg-white border-[#5A5A5A] text-gray-900'
-      : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
-  }`}
->
-  {option}
-</button>
-
-            ))}
-          </div>
-        )
+      case 'gender':
+        return renderOptionsHardCoded()
 
       default:
         return null
@@ -441,14 +316,7 @@ export default function QuestionnaireSection() {
   return (
     <section id="questionnaire" className="py-1 bg-[#E5E7EB] min-h-screen">
       <div className="container mx-auto px-4 max-w-4xl">
-        {/* Top motivational text */}
-        <div className="text-right mb-8">
-          
-        </div>
-
-        {/* Main heading */}
-        <h2 className="text-4xl heading-font md:text-5xl font-bold text-black mb-6 text-center">
-          {/* Fill this out to get started! */}
+        <h2 className="text-3xl heading-font md:text-3xl font-bold text-black mb-6 text-center">
           FILL THIS OUT TO GET STARTED!
         </h2>
 
@@ -468,10 +336,8 @@ export default function QuestionnaireSection() {
             {currentQuestion.question}
           </h3>
 
-          {/* Input field */}
           <div className="mb-4 normal-font">{renderInput()}</div>
 
-          {/* Error message */}
           {errors[currentQuestion.id] && (
             <p className="text-[#5A5A5A] normal-font text-sm mt-2 text-center">{errors[currentQuestion.id]}</p>
           )}

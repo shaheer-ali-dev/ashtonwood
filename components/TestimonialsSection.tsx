@@ -6,8 +6,8 @@ export default function TestimonialsSection() {
   const testimonials = [
     {
       quote:
-        "Wait those progress photos are actually insane — it's so easy to forget all the work I've put in, but it's really about the small wins that add up to the bigger outcome!",
-      author: 'Laurie',
+        "Working with Ashton has genuinely been a game-changer for me. He took the time to understand my nutritional needs and built a meal plan that didn’t just ‘fit’, but felt individualized, doable, and enjoyable. In the gym, he pushed me past the limits I thought I had, always with encouragement and a belief in me that made me want to show up stronger each session. The most meaningful part of this experience was the genuine check ins. You can truly see his care reflected in everything he does. I’ve grown so much in both confidence and consistency because of his guidance. Ashton isn’t just a coach...he’s the support system I didn’t know I needed. I'm forever grateful, thank you Ashton!",
+      author: 'Megan',
     },
     {
       quote:

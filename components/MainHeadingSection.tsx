@@ -38,16 +38,16 @@ export default function MainHeadingSection() {
           {/* Right side - Content */}
 <div className="text-center md:text-left space-y-5 w-34 mx-auto md:mx-0">
   <h1 className="font-extrabold leading-tight w-34">
-    <span className="text-xl md:text-1xl heading-font lg:text-3xl text-black block">
+    <span className="text-xl md:text-3xl heading-font lg:text-3xl text-black block">
       THIS ISN’T ABOUT GETTING RESULTS AND FALLING BACK,
     </span>
 
-    <span className="text-xl md:text-1xl heading-font lg:text-3xl text-[#5A5A5A] block mt-1">
+    <span className="text-xl md:text-3xl heading-font lg:text-3xl text-[#5A5A5A] block mt-1">
       IT’S ABOUT BECOMING THE PERSON WHO NEVER DOES.
     </span>
   </h1>
 
-  <p className="text-sm md:text-base normal-font leading-[22px] md:leading-[26px] text-gray-600 max-w-xl">
+  <p className="text-sm md:text-base normal-font leading-[22px] md:leading-[26px] text-black max-w-xl">
     This isn’t just about working out.
     This is about stepping into the strongest, most confident version of yourself.
     My 1:1 coaching program is built to help you lift heavy, sharpen your mindset,
