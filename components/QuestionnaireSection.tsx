@@ -439,7 +439,7 @@ export default function QuestionnaireSection() {
   }
 
   return (
-    <section id="questionnaire" className="py-10 bg-[#E5E7EB] min-h-screen">
+    <section id="questionnaire" className="py-1 bg-[#E5E7EB] min-h-screen">
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Top motivational text */}
         <div className="text-right mb-8">
@@ -495,7 +495,7 @@ export default function QuestionnaireSection() {
           <button
             type="button"
             onClick={handleNext}
-            className="px-8 py-4 rounded-lg normal-font font-semibold bg-black text-white border-2 border-[#5A5A5A] transition-all"
+            className="px-8 py-4 rounded-lg normal-font font-semibold bg-transperant text-black border-2 border-[#5A5A5A] transition-all"
           >
             {currentStep === questions.length - 1 ? 'Submit' : 'Next →'}
           </button>
