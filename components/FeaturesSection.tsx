@@ -54,27 +54,17 @@ export default function FeaturesSection() {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="relative bg-white rounded-lg border border-black-100 p-6 min-h-[240px] shadow-sm"
+              className="relative bg-[#888c9c] rounded-lg border border-white-100 p-6 min-h-[240px] shadow-sm"
             >
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <div className="w-10 h-10 rounded-full border-2 border-black-200 flex items-center justify-center mr-4">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="w-5 h-5 text-black-300"
-                      viewBox="0 0 24 24"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    >
-                      <polyline points="20 6 9 17 4 12" />
-                    </svg>
+                  <div className="w-10 h-10 rounded-full border-2 border-white-200 flex items-center justify-center mr-4">
+                    <svg width="100%" height="100%" viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M19.0127 29.0569L24.0127 34.0569L36.5127 21.5569" stroke="white" stroke-width="3.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   </div>
                 </div>
 
-                <h3 className="text-black heading-font font-extrabold italic text-lg md:text-xl leading-tight">
+                <h3 className="text-white table-heading-font font-extrabold italic text-lg md:text-xl leading-tight">
                   {feature.title}
                 </h3>
               </div>
@@ -82,8 +72,8 @@ export default function FeaturesSection() {
               <ul className="mt-6 normal-font space-y-4 text-gray-800 text-sm">
                 {feature.items.map((item, i) => (
                   <li key={i} className="flex normal-font gap-3 items-start">
-                    <span className="mt-1 text-[10px] normal-font leading-none">•</span>
-                    <span className="text-[15px] normal-font">{item}</span>
+                    <span className="mt-1 text-white normal-font leading-none">•</span>
+                    <span className="text-white normal-font">{item}</span>
                   </li>
                 ))}
               </ul>
