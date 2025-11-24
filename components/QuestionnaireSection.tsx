@@ -360,15 +360,20 @@ export default function QuestionnaireSection() {
         }
 
         const getLayoutClass = () => {
-          if (currentQuestion.type === 'age') return 'grid grid-cols-2 gap-3'
-          if (currentQuestion.type === 'gender') {
-            // Male and Female side by side, Other below
-            return 'space-y-3'
-          }
-          if (currentQuestion.type === 'guardian') return 'space-y-3'
-          if (currentQuestion.type === 'yes-no') return 'grid grid-cols-2 gap-3'
-          return 'space-y-3'
-        }
+  // All multiple choice-style questions use a 2-column layout
+  if (
+    currentQuestion.type === 'multiple-choice' ||
+    currentQuestion.type === 'age' ||
+    currentQuestion.type === 'yes-no' ||
+    currentQuestion.type === 'guardian' ||
+    currentQuestion.type === 'gender'
+  ) {
+    return 'grid grid-cols-2 gap-4';
+  }
+  
+  return 'space-y-3';
+};
+
 
         const getGenderLayout = () => {
           if (currentQuestion.type === 'gender') {
@@ -410,25 +415,22 @@ export default function QuestionnaireSection() {
           return null
         }
 
-        if (currentQuestion.type === 'gender') {
-          return <div>{getGenderLayout()}</div>
-        }
-
-        return (
+                return (
           <div className={getLayoutClass()}>
             {currentQuestion.options?.map((option) => (
               <button
-                key={option}
-                type="button"
-                onClick={() => handleOptionClick(option)}
-                className={`w-full px-6 py-4 rounded-lg border-2 text-left transition-all font-medium ${
-                  isSelected(option)
-                    ? 'bg-white border-[#5A5A5A] text-gray-900'
-                    : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
-                }`}
-              >
-                {option}
-              </button>
+  key={option}
+  type="button"
+  onClick={() => handleOptionClick(option)}
+  className={`w-full min-h-[55px] flex items-center px-6 py-4 rounded-lg border-2 text-left transition-all font-medium ${
+    isSelected(option)
+      ? 'bg-white border-[#5A5A5A] text-gray-900'
+      : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
+  }`}
+>
+  {option}
+</button>
+
             ))}
           </div>
         )
@@ -495,7 +497,7 @@ export default function QuestionnaireSection() {
           <button
             type="button"
             onClick={handleNext}
-            className="px-8 py-4 rounded-lg normal-font font-semibold bg-[#5A5A5A] text-white border-2 border-[#5A5A5A] hover:bg-[#FF5A8A] transition-all"
+            className="px-8 py-4 rounded-lg normal-font font-semibold bg-black text-white border-2 border-[#5A5A5A] transition-all"
           >
             {currentStep === questions.length - 1 ? 'Submit' : 'Next →'}
           </button>

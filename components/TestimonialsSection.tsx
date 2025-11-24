@@ -6,8 +6,13 @@ export default function TestimonialsSection() {
   const testimonials = [
     {
       quote:
-        "EXAMPLE",
-      author: 'example',
+        "Wait those progress photos are actually insane — it's so easy to forget all the work I've put in, but it's really about the small wins that add up to the bigger outcome!",
+      author: 'Laurie',
+    },
+    {
+      quote:
+        "Wait those progress photos are actually insane — it's so easy to forget all the work I've put in, but it's really about the small wins that add up to the bigger outcome!",
+      author: 'Laurie',
     },
     
   ]

@@ -3,6 +3,7 @@
 import { useRouter } from 'next/navigation'
 import React from 'react'
 import FounderSection from './FounderSection'
+import { title } from 'process'
 
 export default function FeaturesSection() {
   const router = useRouter()
@@ -15,28 +16,32 @@ export default function FeaturesSection() {
 
   const features = [
     {
-      title: 'Build Strength That Lasts:',
+      // title: 'Build Strength That Lasts:',
+      title:'BUILD STRENGTH THAT LASTS:',
       items: [
         'Customized training plans built to help you lift heavier, grow real muscle, and feel genuinely strong.',
         'Full access to the Sculpt By Ashton App so you can track your workouts, nutrition, and progress with ease.',
       ],
     },
     {
-      title: 'Confidence From the Inside Out:',
+      // title: 'Confidence From the Inside Out:',
+      title: 'CONFIDENCE FROM THE INSIDE OUT:',
       items: [
         'Mindset tools and practical strategies to help you break out of self-doubt and develop unbreakable discipline.',
         'Weekly check-ins to keep you grounded, focused, and consistent through your entire journey.',
       ],
     },
     {
-      title: 'A Lifestyle You Can Maintain:',
+      // title: 'A Lifestyle You Can Maintain:',
+      title: 'A LIFESTYLE YOU CAN MAINTAIN:',
       items: [
         'Nutrition guidance tailored to your exact goals, making eating clean simple and sustainable.',
         'Daily habit-building systems designed to stick with you for life — no more starting over.',
       ],
     },
     {
-      title: 'Support You Can Count On:',
+      // title: 'Support You Can Count On:',
+      title: 'SUPPORT YOU CAN COUNT ON:',
       items: ['Direct 1:1 communication with your coach, Ashton, for accountability, motivation, and real guidance whenever you need it.'],
     },
   ]
@@ -54,17 +59,17 @@ export default function FeaturesSection() {
           {features.map((feature, index) => (
             <div
               key={index}
-              className="relative bg-[#888c9c] rounded-lg border border-white-100 p-6 min-h-[240px] shadow-sm"
+className="relative bg-white rounded-lg border border-black p-6 min-h-[240px] shadow-sm"
             >
               <div className="flex items-start">
                 <div className="flex-shrink-0">
                   <div className="w-10 h-10 rounded-full border-2 border-white-200 flex items-center justify-center mr-4">
                     <svg width="100%" height="100%" viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M19.0127 29.0569L24.0127 34.0569L36.5127 21.5569" stroke="white" stroke-width="3.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<path d="M19.0127 29.0569L24.0127 34.0569L36.5127 21.5569" stroke="black" stroke-width="3.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
                   </div>
                 </div>
 
-                <h3 className="text-white table-heading-font font-extrabold italic text-lg md:text-xl leading-tight">
+                <h3 className="text-black table-heading-font font-extrabold italic text-lg md:text-xl leading-tight">
                   {feature.title}
                 </h3>
               </div>
@@ -72,8 +77,8 @@ export default function FeaturesSection() {
               <ul className="mt-6 normal-font space-y-4 text-gray-800 text-sm">
                 {feature.items.map((item, i) => (
                   <li key={i} className="flex normal-font gap-3 items-start">
-                    <span className="mt-1 text-white normal-font leading-none">•</span>
-                    <span className="text-white normal-font">{item}</span>
+                    <span className="mt-1 text-black normal-font leading-none">•</span>
+                    <span className="text-black normal-font">{item}</span>
                   </li>
                 ))}
               </ul>
@@ -82,27 +87,17 @@ export default function FeaturesSection() {
         </div>
 
         <div className="flex justify-center">
-          <button
-  onClick={handleSignUp}
-  className="bg-white border border-black text-black px-10 py-4 rounded-full font-bold text-lg 
+         <button onClick={handleSignUp} className="bg-black border border-black text-white px-10 py-4 rounded-full font-bold text-lg 
              hover:bg-black hover:text-white transition-all shadow-xl 
-             transform hover:scale-105 flex items-center gap-2 group"
->
-  SIGN UP NOW
-  <svg
-    className="w-5 h-5 group-hover:translate-x-1 transition-transform"
-    fill="none"
-    stroke="currentColor"
-    viewBox="0 0 24 24"
-  >
-    <path 
-      strokeLinecap="round" 
-      strokeLinejoin="round" 
-      strokeWidth={2} 
-      d="M13 7l5 5m0 0l-5 5m5-5H6" 
-    />
-  </svg>
-</button>
+             transform hover:scale-105 flex items-center gap-2 group">
+                <span>SIGN UP NOW</span>
+                <span className="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center">
+                  {/* right arrow */}
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-4 h-4 text-white" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10.293 15.707a1 1 0 010-1.414L13.586 11H3a1 1 0 110-2h10.586l-3.293-3.293a1 1 0 111.414-1.414l5 5a1 1 0 01.083 1.32l-.083.094-5 5a1 1 0 01-1.414 0z" clipRule="evenodd" />
+                  </svg>
+                </span>
+              </button>
         </div>
       </div>
     </section>
