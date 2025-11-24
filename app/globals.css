@@ -39,7 +39,6 @@ font-family: "Lato", sans-serif;
 .table-heading-font{
   font-family: "Montserrat", sans-serif;
   /* font-weight: bold; */
-  font-style: italic;
   word-spacing: normal;
   letter-spacing: 1px; /* <— character spacing */
   font-size: 20px;

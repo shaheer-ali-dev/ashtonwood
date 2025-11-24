@@ -32,10 +32,8 @@ const questions: Question[] = [
       'Fat Loss (cut)',
       'Muscle Gain (bulk)',
       'Recomposition (tone)',
-      'Improve flexibility/mobility',
-      'Event/Sport-specific training',
-      
-      
+       'Event/Sport-specific training',
+      'Improve flexibility/mobility', 
     ],
     required: true,
   },
@@ -441,7 +439,7 @@ export default function QuestionnaireSection() {
   }
 
   return (
-    <section id="questionnaire" className="py-20 bg-[#FAF9F6] min-h-screen">
+    <section id="questionnaire" className="py-10 bg-[#E5E7EB] min-h-screen">
       <div className="container mx-auto px-4 max-w-4xl">
         {/* Top motivational text */}
         <div className="text-right mb-8">

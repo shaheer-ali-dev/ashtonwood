@@ -4,9 +4,9 @@ import React from 'react'
 
 export default function FounderSection() {
   return (
-    <section className="py-16">
+    <section className="py-10 bg-[#E5E7EB] min-h-screen">
       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center gap-8">
-        <div className="md:w-2/3">
+        <div className="md:w-2/3 ">
           <h3 className="heading-font text-2xl md:text-3xl font-extrabold text-black mb-4">
             {/* Founder: <span className="text-gray-700">Ashton Woods</span> */}
             FOUNDER: ASHTON WOODS

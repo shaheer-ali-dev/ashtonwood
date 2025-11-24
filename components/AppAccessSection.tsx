@@ -9,7 +9,7 @@ export default function AppAccessSection() {
   }
 
   return (
-    <section className="py-20">
+    <section className="py-10 bg-[#E5E7EB]">
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Left side - Layered device images (stacked copies to simulate multiple devices/watch) */}

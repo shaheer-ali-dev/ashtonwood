@@ -16,32 +16,32 @@ export default function FeaturesSection() {
 
   const features = [
     {
-      // title: 'Build Strength That Lasts:',
-      title:'BUILD STRENGTH THAT LASTS:',
+      title: 'Build Strength That Lasts:',
+      // title:'BUILD STRENGTH THAT LASTS:',
       items: [
         'Customized training plans built to help you lift heavier, grow real muscle, and feel genuinely strong.',
         'Full access to the Sculpt By Ashton App so you can track your workouts, nutrition, and progress with ease.',
       ],
     },
     {
-      // title: 'Confidence From the Inside Out:',
-      title: 'CONFIDENCE FROM THE INSIDE OUT:',
+      title: 'Confidence From the Inside Out:',
+      // title: 'CONFIDENCE FROM THE INSIDE OUT:',
       items: [
         'Mindset tools and practical strategies to help you break out of self-doubt and develop unbreakable discipline.',
         'Weekly check-ins to keep you grounded, focused, and consistent through your entire journey.',
       ],
     },
     {
-      // title: 'A Lifestyle You Can Maintain:',
-      title: 'A LIFESTYLE YOU CAN MAINTAIN:',
+      title: 'A Lifestyle You Can Maintain:',
+      // title: 'A LIFESTYLE YOU CAN MAINTAIN:',
       items: [
         'Nutrition guidance tailored to your exact goals, making eating clean simple and sustainable.',
         'Daily habit-building systems designed to stick with you for life — no more starting over.',
       ],
     },
     {
-      // title: 'Support You Can Count On:',
-      title: 'SUPPORT YOU CAN COUNT ON:',
+      title: 'Support You Can Count On:',
+      // title: 'SUPPORT YOU CAN COUNT ON:',
       items: ['Direct 1:1 communication with your coach, Ashton, for accountability, motivation, and real guidance whenever you need it.'],
     },
   ]
@@ -63,9 +63,10 @@ className="relative bg-white rounded-lg border border-black p-6 min-h-[240px] sh
             >
               <div className="flex items-start">
                 <div className="flex-shrink-0">
-                  <div className="w-10 h-10 rounded-full border-2 border-white-200 flex items-center justify-center mr-4">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center mr-4">
                     <svg width="100%" height="100%" viewBox="0 0 55 55" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M19.0127 29.0569L24.0127 34.0569L36.5127 21.5569" stroke="black" stroke-width="3.75" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<path d="M19.0127 29.0569L24.0127 34.0569L36.5127 21.5569" stroke="black" strokeWidth="3.75" stroke-linecap="round" stroke-linejoin="round"/><path d="M15.2627 6.15143C18.9399 4.02431 23.2092 2.80688 27.7627 2.80688C41.5697 2.80688 52.7627 13.9998 52.7627 27.8069C52.7627 41.6139 41.5697 52.8069 27.7627 52.8069C13.9556 52.8069 2.7627 41.6139 2.7627 27.8069C2.7627 23.2534 3.98012 18.9841 6.10725 15.3069" stroke="black" stroke-width="3.75" stroke-linecap="round"/>
+</svg>
                   </div>
                 </div>
 

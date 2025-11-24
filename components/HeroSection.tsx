@@ -46,27 +46,26 @@ export default function HeroSection() {
           </div>
         </div>
       </div>
-
+<br /><br />
       {/* Content */}
-      <div className="relative z-10 w-full h-full flex items-center justify-center">
-        <div className="w-full max-w-6xl px-4 md:px-10 lg:px-16 flex flex-col items-center justify-center text-center">
-          <header className="mb-6 w-full flex justify-center">
+      <div className="relative mt-3 z-10 w-full h-full flex items-center justify-center">
+        <div className="w-full mt-3 max-w-6xl px-4 md:px-10 lg:px-16 flex flex-col items-center justify-center text-center">
+          <header className="mb-6 mt-4 w-full flex justify-center">
             <div className="flex flex-col items-center">
               <div
-                className="font-bold text-white heading-font whitespace-nowrap"
-                style={{ fontSize: 'clamp(2.25rem, 6vw, 4.5rem)', lineHeight: 1 }}
-              >
-                {/* Average is a habit. */}
-                AVERAGE IS A HABIT
-              </div>
+  className="font-bold mt-4 text-white heading-font whitespace-nowrap"
+  style={{ fontSize: 'clamp(1.75rem, 5vw, 2.5rem)', lineHeight: 1 }}
+>
+  AVERAGE IS A HABIT
+</div>
 
-              <div
-                className="font-bold mt-3 text-white heading-font whitespace-nowrap"
-                style={{ fontSize: 'clamp(2rem, 6vw, 4rem)', lineHeight: 1 }}
-              >
-               {/* Greatness is a decision. */}
-                GREATNESS IS A DECISION
-              </div>
+<div
+  className="font-bold mt-3 text-white heading-font whitespace-nowrap"
+  style={{ fontSize: 'clamp(1.6rem, 5vw, 2.2rem)', lineHeight: 1 }}
+>
+  GREATNESS IS A DECISION
+</div>
+
             </div>
           </header>
 
