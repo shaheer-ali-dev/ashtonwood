@@ -216,6 +216,20 @@ export default function QuestionnaireSection() {
 
     return rows
   }
+const handleNameChange = (field: 'firstName' | 'lastName', value: string) => {
+  setAnswers(prev => ({
+    ...prev,
+    [field]: value
+  }))
+  
+  if (errors[currentQuestion.id]) {
+    setErrors(prev => {
+      const updated = { ...prev }
+      delete updated[currentQuestion.id]
+      return updated
+    })
+  }
+}
 
   const renderInput = () => {
     const value = answers[currentQuestion.id] || ''
@@ -239,28 +253,30 @@ export default function QuestionnaireSection() {
         )
 
       case 'name':
-        return (
-          <div className="grid grid-cols-2 gap-4">
-            <input
-              type="text"
-              value={answers['firstName'] || ''}
-              onChange={e => handleAnswer({ ...answers, firstName: e.target.value })}
-              placeholder="First Name"
-              className={`w-full px-4 py-3 rounded-lg border bg-white text-gray-900 ${
-                hasError ? 'border-[#5A5A5A]' : 'border-gray-300'
-              }`}
-            />
-            <input
-              type="text"
-              value={answers['lastName'] || ''}
-              onChange={e => handleAnswer({ ...answers, lastName: e.target.value })}
-              placeholder="Last Name"
-              className={`w-full px-4 py-3 rounded-lg border bg-white text-gray-900 ${
-                hasError ? 'border-[#5A5A5A]' : 'border-gray-300'
-              }`}
-            />
-          </div>
-        )
+  return (
+    <div className="grid grid-cols-2 gap-4">
+      <input
+        type="text"
+        value={answers.firstName || ''}
+        onChange={e => handleNameChange('firstName', e.target.value)}
+        placeholder="First Name"
+        className={`w-full px-4 py-3 rounded-lg border bg-white text-gray-900 ${
+          hasError ? 'border-[#5A5A5A]' : 'border-gray-300'
+        }`}
+      />
+
+      <input
+        type="text"
+        value={answers.lastName || ''}
+        onChange={e => handleNameChange('lastName', e.target.value)}
+        placeholder="Last Name"
+        className={`w-full px-4 py-3 rounded-lg border bg-white text-gray-900 ${
+          hasError ? 'border-[#5A5A5A]' : 'border-gray-300'
+        }`}
+      />
+    </div>
+  )
+
 
       case 'phone':
         return (
