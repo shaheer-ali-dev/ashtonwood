@@ -26,8 +26,9 @@ const questions: Question[] = [
       'Fat Loss (cut)',
       'Muscle Gain (bulk)',
       'Recomposition (tone)',
-      'Event/Sport-specific training',
       'Improve flexibility/mobility',
+      'Event/Sport-specific training'
+      
     ],
     required: true,
   },
@@ -392,3 +393,4 @@ const handleNameChange = (field: 'firstName' | 'lastName', value: string) => {
     </section>
   )
 }
+
