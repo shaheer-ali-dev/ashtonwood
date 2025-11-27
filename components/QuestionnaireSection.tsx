@@ -188,7 +188,7 @@ export default function QuestionnaireSection() {
           <button
             type="button"
             onClick={() => handleAnswer(first)}
-            className={`px-6 py-4 rounded-[30px] border-2 text-center font-medium w-[350px] ${
+            className={`px-6 py-4 rounded-[30px] border-2 text-center font-bold w-[350px] ${
   answers[currentQuestion.id] === first
     ? 'bg-white border-[#5A5A5A] text-gray-900'
     : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
@@ -393,4 +393,5 @@ const handleNameChange = (field: 'firstName' | 'lastName', value: string) => {
     </section>
   )
 }
+
 
