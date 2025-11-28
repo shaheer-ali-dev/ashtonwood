@@ -88,7 +88,7 @@ className="relative bg-white rounded-lg border border-black p-6 min-h-[240px] sh
         </div>
 
         <div className="flex justify-center">
-         <button
+        <button
   onClick={handleSignUp}
   className="bg-black border border-black text-white px-10 py-4 rounded-full font-bold text-lg 
              shadow-md hover:shadow-2xl transition-shadow duration-300 ease-in-out

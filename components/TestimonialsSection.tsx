@@ -116,7 +116,7 @@ export default function TestimonialsSection() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {slide.map((t, i) => (
                       <div key={i} className="border border-black rounded-lg p-6 bg-white">
-                        <p className="normal-font text-sm text-gray-700 leading-relaxed">"{t.quote}"</p>
+                        <p className="normal-font text-sm font-bold text-black leading-relaxed">"{t.quote}"</p>
                         <p className="normal-font text-right text-xs font-semibold mt-4">- {t.author}</p>
                       </div>
                     ))}

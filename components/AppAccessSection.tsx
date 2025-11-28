@@ -73,7 +73,7 @@ export default function AppAccessSection() {
              shadow-md hover:shadow-2xl transition-shadow duration-300 ease-in-out
              transform hover:scale-105 flex items-center gap-2 group"
 >
- GET ACCESS TO MY APP
+  GET ACCESS TO MY APP
   <img src="https://cdn.prod.website-files.com/681907465c74d32f50b71064/681907465c74d32f50b71077_arrow-circle-broken-right.svg" alt="" />
 </button>
             </div>

@@ -201,7 +201,7 @@ export default function QuestionnaireSection() {
             <button
               type="button"
               onClick={() => handleAnswer(second)}
-              className={`px-6 py-4 rounded-[30px] border-2 text-center font-medium w-[350px] ${
+              className={`px-6 py-4 rounded-[30px] border-2 text-center font-bold w-[350px] ${
   answers[currentQuestion.id] === second
     ? 'bg-white border-[#5A5A5A] text-gray-900'
     : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
@@ -372,7 +372,7 @@ const handleNameChange = (field: 'firstName' | 'lastName', value: string) => {
             type="button"
             onClick={handlePrevious}
             disabled={currentStep === 0}
-            className={`px-8 py-4 rounded-lg normal-font font-semibold bg-transparent text-black border-2 border-[#5A5A5A] transition-all ${
+            className={`px-8 py-4 rounded-lg normal-font font-bold bg-transparent text-black border-2 border-[#5A5A5A] transition-all ${
   currentStep === 0 ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-100'
 }`}
 
@@ -383,7 +383,7 @@ const handleNameChange = (field: 'firstName' | 'lastName', value: string) => {
           <button
             type="button"
             onClick={handleNext}
-            className="px-8 py-4 rounded-lg normal-font font-semibold bg-white text-black border-2 border-[#5A5A5A] hover:bg-gray-100 transition-all"
+            className="px-8 py-4 rounded-lg normal-font font-bold bg-white text-black border-2 border-[#5A5A5A] hover:bg-gray-100 transition-all"
 
           >
             {currentStep === questions.length - 1 ? 'Submit' : 'Next →'}
