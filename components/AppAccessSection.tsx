@@ -13,30 +13,18 @@ export default function AppAccessSection() {
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           {/* Left side - Layered device images */}
-          <div className="relative order-2 md:order-1 flex items-center justify-center">
-            <div className="relative w-[520px] h-[420px] md:w-[680px] md:h-[520px]">
-              <img
-                src="/app-screenshot.jpg"
-                alt="App Screenshot - left"
-                className="absolute left-0 top-8 w-[320px] md:w-[380px] object-cover rounded-3xl shadow-2xl transform -rotate-12 -translate-x-10 z-10"
-              />
-              <img
-                src="/app-screenshot.jpg"
-                alt="App Screenshot - center"
-                className="absolute left-1/2 top-0 w-[360px] md:w-[420px] object-cover rounded-3xl shadow-2xl transform -translate-x-1/2 z-20"
-              />
-              <img
-                src="/app-screenshot.jpg"
-                alt="App Screenshot - right"
-                className="absolute right-0 top-12 w-[300px] md:w-[360px] object-cover rounded-3xl shadow-2xl transform rotate-6 translate-x-8 z-0"
-              />
-              <img
-                src="/app-screenshot.jpg"
-                alt="App Watch mock"
-                className="absolute left-1/2 bottom-0 w-[100px] md:w-[140px] object-cover rounded-2xl shadow-2xl transform -translate-x-8 translate-y-8 z-30"
-              />
-            </div>
-          </div>
+         <div className="relative order-2 md:order-1 flex items-center justify-center">
+  <div className="relative w-[600px] h-[500px] md:w-[750px] md:h-[600px] flex items-center justify-center">
+    
+    <img
+      src="/app-screenshot.png"
+      alt="App Watch mock"
+      className="w-[200px] md:w-[260px] object-contain z-30"
+    />
+
+  </div>
+</div>
+
 
           {/* Right side - Content */}
           <div className="text-center md:text-left order-1 md:order-2 space-y-6 px-4">
