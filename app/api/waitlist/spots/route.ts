@@ -1,46 +1,43 @@
-import { NextResponse } from 'next/server'
-import fs from 'fs'
-import path from 'path'
+import { NextResponse } from 'next/server';
+import { getWaitlistGroups, getSpotsLeftInCurrentBatch } from '@/lib/waitlist-storage';
+import fs from 'fs';
+import path from 'path';
 
-const FILE_PATH = path.join(process.cwd(), 'waitlist.json')
+const FILE_PATH = path.join(process.cwd(), 'waitlist.json');
 
-function readEntriesFromFile() {
-  if (!fs.existsSync(FILE_PATH)) return []
-
-  const fileContents = fs.readFileSync(FILE_PATH, 'utf8')
-
-  try {
-    return JSON.parse(fileContents)
-  } catch (err) {
-    console.error('Invalid JSON in waitlist file:', err)
-    return []
+function loadAllGroupsFromFile() {
+  if (fs.existsSync(FILE_PATH)) {
+    try {
+      const fileContents = fs.readFileSync(FILE_PATH, 'utf8');
+      const data = JSON.parse(fileContents);
+      if (Array.isArray(data)) return data;
+      else return [];
+    } catch {
+      return [];
+    }
   }
+  return [];
 }
-
-const MAX_WAITLIST_SIZE = 33 // your limit
 
 export async function GET() {
   try {
-    const entries = readEntriesFromFile()
-
-    const filled = entries.length
-    const spotsLeft = Math.max(0, MAX_WAITLIST_SIZE - filled)
-    const isFull = filled >= MAX_WAITLIST_SIZE
+    const groups = loadAllGroupsFromFile();
+    const currentGroup = groups[groups.length - 1] || { entries: [] };
+    const filled = currentGroup.entries.length;
+    const spotsLeft = Math.max(0, 33 - filled);
+    const isFull = filled >= 33;
 
     return NextResponse.json(
       {
-        total: MAX_WAITLIST_SIZE,
+        total: 33,
         filled,
         spotsLeft,
         isFull,
+        batch: groups.length // Which batch is open
       },
       { status: 200 }
-    )
+    );
   } catch (error) {
-    console.error('Error reading waitlist:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
