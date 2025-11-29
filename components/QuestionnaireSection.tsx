@@ -15,6 +15,7 @@ interface Question {
   options?: string[]
   placeholder?: string
   required?: boolean
+  multiple?:boolean
 }
 
 const questions: Question[] = [
@@ -425,6 +426,7 @@ const handleNameChange = (field: 'firstName' | 'lastName', value: string) => {
     </section>
   )
 }
+
 
 
 
