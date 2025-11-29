@@ -23,23 +23,44 @@ export interface WaitlistGroup {
   entries: WaitlistEntry[];
 }
 
-// If you use file persistence, you'll load/save waitlistGroups[] elsewhere.
+// If you use file persistence, always load/save waitlistGroups[] elsewhere!
 let waitlistGroups: WaitlistGroup[] = [];
 export const MAX_WAITLIST_SIZE = 33;
 
-// Helper for file persistence
+// Set from file database
 export function setWaitlistGroups(groups: WaitlistGroup[]) {
-  waitlistGroups = groups;
+  waitlistGroups = Array.isArray(groups) ? groups : [];
 }
 
+// Main getter for batches
 export function getWaitlistGroups(): WaitlistGroup[] {
   return [...waitlistGroups];
 }
 
-// Adds an entry, creating new batch if needed.
+// Defensive getter: always returns a real current batch group!
+export function getCurrentGroup(): WaitlistGroup {
+  if (
+    waitlistGroups.length === 0 ||
+    !waitlistGroups[waitlistGroups.length - 1] ||
+    !Array.isArray(waitlistGroups[waitlistGroups.length - 1].entries)
+  ) {
+    const newGroup: WaitlistGroup = { id: waitlistGroups.length + 1, entries: [] };
+    waitlistGroups.push(newGroup);
+    return newGroup;
+  }
+  return waitlistGroups[waitlistGroups.length - 1];
+}
+
+// How many spots are left in current batch
+export function getSpotsLeftInCurrentBatch(): number {
+  const currentGroup = getCurrentGroup();
+  return Math.max(0, MAX_WAITLIST_SIZE - currentGroup.entries.length);
+}
+
+// Add an entry to current or new batch (never throws!)
 export function addWaitlistEntry(entry: WaitlistEntry): { success: boolean, groupId: number } {
-  let currentGroup = waitlistGroups[waitlistGroups.length - 1];
-  if (!currentGroup || currentGroup.entries.length >= MAX_WAITLIST_SIZE) {
+  let currentGroup = getCurrentGroup();
+  if (currentGroup.entries.length >= MAX_WAITLIST_SIZE) {
     currentGroup = { id: waitlistGroups.length + 1, entries: [] };
     waitlistGroups.push(currentGroup);
   }
@@ -47,19 +68,12 @@ export function addWaitlistEntry(entry: WaitlistEntry): { success: boolean, grou
   return { success: true, groupId: currentGroup.id };
 }
 
-// Count total entries in all batches.
+// How many batches (groups) exist?
+export function getBatchCount(): number {
+  return waitlistGroups.length;
+}
+
+// Overall entry count
 export function getTotalWaitlistCount(): number {
-  return waitlistGroups.reduce((acc, g) => acc + g.entries.length, 0);
-}
-
-// Spots left in current batch (for display only).
-export function getSpotsLeftInCurrentBatch(): number {
-  const current = waitlistGroups[waitlistGroups.length - 1];
-  return current ? Math.max(0, MAX_WAITLIST_SIZE - current.entries.length) : MAX_WAITLIST_SIZE;
-}
-
-// Is current group full?
-export function isCurrentBatchFull(): boolean {
-  const current = waitlistGroups[waitlistGroups.length - 1];
-  return current ? current.entries.length >= MAX_WAITLIST_SIZE : false;
+  return waitlistGroups.reduce((sum, group) => sum + group.entries.length, 0);
 }
