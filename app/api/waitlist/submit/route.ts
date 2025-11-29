@@ -1,49 +1,43 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server';
 import {
   addWaitlistEntry,
-  getSpotsLeft,
-  getWaitlistCount,
-  isWaitlistFull,
-  MAX_WAITLIST_SIZE,
-  type WaitlistEntry
-} from '@/lib/waitlist-storage'
+  getSpotsLeftInCurrentBatch,
+  isCurrentBatchFull,
+  getWaitlistGroups,
+  setWaitlistGroups,
+  type WaitlistEntry,
+} from '@/lib/waitlist-storage';
 
-import fs from 'fs'
-import path from 'path'
+import fs from 'fs';
+import path from 'path';
 
-const FILE_PATH = path.join(process.cwd(), 'waitlist.json')
+// File for persistence
+const FILE_PATH = path.join(process.cwd(), 'waitlist.json');
 
-function saveEntryToFile(entry: any) {
-  let data = []
-
-  // Read existing data (if file exists)
+// Load batches from file if it exists!
+function loadAllGroupsFromFile() {
   if (fs.existsSync(FILE_PATH)) {
-    const fileContents = fs.readFileSync(FILE_PATH, 'utf8')
     try {
-      data = JSON.parse(fileContents)
-    } catch (err) {
-      data = [] // If JSON is broken, start fresh
+      const fileContents = fs.readFileSync(FILE_PATH, 'utf8');
+      const data = JSON.parse(fileContents);
+      if (Array.isArray(data)) setWaitlistGroups(data); // Set to memory
+      else setWaitlistGroups([]);
+    } catch {
+      setWaitlistGroups([]);
     }
   }
+}
 
-  // Add new entry
-  data.push(entry)
-
-  // Save updated JSON
-  fs.writeFileSync(FILE_PATH, JSON.stringify(data, null, 2), 'utf8')
+// Save batches to file
+function saveAllGroupsToFile(groups: any) {
+  fs.writeFileSync(FILE_PATH, JSON.stringify(groups, null, 2), 'utf8');
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
+    loadAllGroupsFromFile(); // always load latest
 
-    // Check if waitlist is full
-    if (isWaitlistFull()) {
-      return NextResponse.json(
-        { error: 'Waitlist is full', message: 'All 33 spots have been filled.' },
-        { status: 400 }
-      )
-    }
+    const body = await request.json();
 
     // Create new entry
     const newEntry: WaitlistEntry = {
@@ -64,37 +58,31 @@ export async function POST(request: NextRequest) {
       phone: body.phone || '',
       email: body.email || '',
       instagram: body.instagram || '',
-    }
-    saveEntryToFile(newEntry)
+    };
 
-    // Add to waitlist
-    const success = addWaitlistEntry(newEntry)
+    // Add to batch
+    const { success, groupId } = addWaitlistEntry(newEntry);
 
-    if (!success) {
-      return NextResponse.json(
-        { error: 'Waitlist is full', message: 'All 33 spots have been filled.' },
-        { status: 400 }
-      )
-    }
+    // Save to file after adding
+    saveAllGroupsToFile(getWaitlistGroups());
 
-    // Calculate spots left
-    const spotsLeft = getSpotsLeft()
-    const position = getWaitlistCount()
+    // Calculate spots left in current batch
+    const spotsLeft = getSpotsLeftInCurrentBatch();
 
     return NextResponse.json(
       {
         success: true,
         message: 'Successfully added to waitlist',
         spotsLeft,
-        position,
+        groupId,
       },
       { status: 200 }
-    )
+    );
   } catch (error) {
-    console.error('Error processing waitlist submission:', error)
+    console.error('Error processing waitlist submission:', error);
     return NextResponse.json(
       { error: 'Internal server error', message: 'Failed to process your submission.' },
       { status: 500 }
-    )
+    );
   }
 }
