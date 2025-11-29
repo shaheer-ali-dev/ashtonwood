@@ -17,7 +17,10 @@ export interface WaitlistEntry {
   email: string;
   instagram: string;
 }
-
+export function isCurrentBatchFull(): boolean {
+  const currentGroup = getCurrentGroup();
+  return currentGroup.entries.length >= MAX_WAITLIST_SIZE;
+}
 export interface WaitlistGroup {
   id: number;
   entries: WaitlistEntry[];
@@ -77,3 +80,4 @@ export function getBatchCount(): number {
 export function getTotalWaitlistCount(): number {
   return waitlistGroups.reduce((sum, group) => sum + group.entries.length, 0);
 }
+
