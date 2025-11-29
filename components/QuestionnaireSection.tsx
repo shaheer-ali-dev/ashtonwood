@@ -30,6 +30,7 @@ const questions: Question[] = [
       'Event/Sport-specific training'
       
     ],
+      multiple: true, // <-- add this
     required: true,
   },
   {
@@ -63,7 +64,7 @@ const questions: Question[] = [
   {
     id: 'seriousness',
     type: 'scale',
-    question: 'On a scale of 1-10, how serious are you about unlocking your full baddie potential?',
+    question: 'On a scale of 1-10, how serious are you about unlocking your full potential?',
     placeholder: '',
     required: true,
   },
@@ -130,16 +131,34 @@ export default function QuestionnaireSection() {
     setErrors({})
   }, [currentStep])
 
-  const handleAnswer = (value: any) => {
-    setAnswers(prev => ({ ...prev, [currentQuestion.id]: value }))
-    if (errors[currentQuestion.id]) {
-      setErrors(prev => {
-        const newErrors = { ...prev }
-        delete newErrors[currentQuestion.id]
-        return newErrors
-      })
-    }
+ const handleAnswer = (value: any) => {
+  if (currentQuestion.multiple) {
+    setAnswers(prev => {
+      const existing = prev[currentQuestion.id] || []
+
+      // Toggle selection
+      const newArray = existing.includes(value)
+        ? existing.filter(v => v !== value)
+        : [...existing, value]
+
+      return { ...prev, [currentQuestion.id]: newArray }
+    })
+
+    return // don't clear errors yet
   }
+
+  // Normal single-select
+  setAnswers(prev => ({ ...prev, [currentQuestion.id]: value }))
+
+  if (errors[currentQuestion.id]) {
+    setErrors(prev => {
+      const newErrors = { ...prev }
+      delete newErrors[currentQuestion.id]
+      return newErrors
+    })
+  }
+}
+
 
   const validateCurrentStep = (): boolean => {
     if (currentQuestion.required) {
@@ -187,9 +206,13 @@ export default function QuestionnaireSection() {
         <div key={i} className={`flex justify-center gap-4 mb-4`}>
           <button
             type="button"
-            onClick={() => handleAnswer(first)}
-            className={`px-6 py-4 rounded-[30px] border-2 text-center font-bold w-[350px] ${
-  answers[currentQuestion.id] === first
+onClick={() => {
+  handleAnswer(first)
+  if (!currentQuestion.multiple) handleNext()
+}}            className={`px-6 py-4 rounded-[30px] border-2 text-center font-bold w-[350px] ${
+currentQuestion.multiple
+  ? answers[currentQuestion.id]?.includes(first)
+  : answers[currentQuestion.id] === first
     ? 'bg-white border-[#5A5A5A] text-gray-900'
     : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
 }`}
@@ -314,14 +337,23 @@ const handleNameChange = (field: 'firstName' | 'lastName', value: string) => {
 
       case 'scale':
         return (
-          <input
-            type="range"
-            min="1"
-            max="10"
-            value={value || 1}
-            onChange={(e) => handleAnswer(e.target.value)}
-            className="w-full h-3 bg-gray-200 rounded-lg accent-[#5A5A5A]"
-          />
+          <div className="w-full">
+  <input
+    type="range"
+    min="1"
+    max="10"
+    value={value || 1}
+    onChange={(e) => handleAnswer(e.target.value)}
+    className="w-full h-3 bg-gray-200 rounded-lg accent-[#5A5A5A]"
+  />
+
+  <div className="flex justify-between text-xs mt-2 text-gray-700">
+    {[1,2,3,4,5,6,7,8,9,10].map(num => (
+      <span key={num}>{num}</span>
+    ))}
+  </div>
+</div>
+
         )
 
       case 'multiple-choice':
@@ -393,5 +425,6 @@ const handleNameChange = (field: 'firstName' | 'lastName', value: string) => {
     </section>
   )
 }
+
 
 
