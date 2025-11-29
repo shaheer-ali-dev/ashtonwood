@@ -33,21 +33,37 @@ interface WaitlistEntry {
   instagram: string;
 }
 
+interface WaitlistGroup {
+  id: number;
+  entries: WaitlistEntry[];
+}
+
 export default function AdminPage() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loginError, setLoginError] = useState('');
   const [submissions, setSubmissions] = useState<Submission[]>([]);
-  const [waitlistEntries, setWaitlistEntries] = useState<WaitlistEntry[]>([]);
+  // REMOVE old waitlistEntries state, it's replaced by waitlistGroups
+  // const [waitlistEntries, setWaitlistEntries] = useState<WaitlistEntry[]>([]);
   const [activeTab, setActiveTab] = useState<'contact' | 'waitlist'>('waitlist');
   const [loading, setLoading] = useState(false);
+  const [waitlistGroups, setWaitlistGroups] = useState<WaitlistGroup[]>([]);
+
+  useEffect(() => {
+    async function fetchWaitlists() {
+      const res = await fetch('/api/admin/waitlist');
+      const data = await res.json();
+      setWaitlistGroups(data.groups || []);
+    }
+    fetchWaitlists();
+  }, []);
 
   // Fetch submissions after authentication
   useEffect(() => {
     if (isAuthenticated) {
       fetchSubmissions();
-      fetchWaitlistEntries();
+      // No need to call fetchWaitlistEntries, handled above
     }
   }, [isAuthenticated]);
 
@@ -58,9 +74,7 @@ export default function AdminPage() {
     try {
       const response = await fetch('/api/admin/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
 
@@ -92,21 +106,7 @@ export default function AdminPage() {
     }
   };
 
-  const fetchWaitlistEntries = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch('/api/waitlist/entries');
-      const data = await response.json();
-      // console.log(data)
-      if (response.ok) {
-setWaitlistEntries(data.entries);   console.log(data.entries)    }
-    } catch (error) {
-      console.error('Error fetching waitlist entries:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  // format date helper remains the same
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return date.toLocaleString('en-US', {
@@ -117,6 +117,11 @@ setWaitlistEntries(data.entries);   console.log(data.entries)    }
       minute: '2-digit',
     });
   };
+
+  // Calculate total filled spots for stats banner
+  const totalFilled = waitlistGroups.reduce(
+    (sum, group) => sum + group.entries.length, 0
+  );
 
   // Login Form
   if (!isAuthenticated) {
@@ -207,16 +212,16 @@ setWaitlistEntries(data.entries);   console.log(data.entries)    }
         {/* Stats Banner */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div className="bg-white rounded-lg shadow p-6">
-            <div className="text-sm font-medium text-gray-500">Total Spots</div>
+            <div className="text-sm font-medium text-gray-500">Total Spots in Group</div>
             <div className="mt-2 text-3xl font-bold text-gray-900">33</div>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
             <div className="text-sm font-medium text-gray-500">Filled</div>
-            <div className="mt-2 text-3xl font-bold text-green-600">{waitlistEntries.length}</div>
+            <div className="mt-2 text-3xl font-bold text-green-600">{totalFilled}</div>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
             <div className="text-sm font-medium text-gray-500">Available</div>
-            <div className="mt-2 text-3xl font-bold text-blue-600">{33 - waitlistEntries.length}</div>
+            <div className="mt-2 text-3xl font-bold text-blue-600">{33 - (waitlistGroups[waitlistGroups.length - 1]?.entries.length || 0)}</div>
           </div>
         </div>
 
@@ -231,7 +236,7 @@ setWaitlistEntries(data.entries);   console.log(data.entries)    }
                   : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
               }`}
             >
-              Waitlist ({waitlistEntries.length}/33)
+              Waitlist ({totalFilled})
             </button>
             <button
               onClick={() => setActiveTab('contact')}
@@ -252,42 +257,32 @@ setWaitlistEntries(data.entries);   console.log(data.entries)    }
           </div>
         ) : activeTab === 'waitlist' ? (
           // Waitlist Tab
-          waitlistEntries.length === 0 ? (
+          waitlistGroups.length === 0 ? (
             <div className="bg-white rounded-lg shadow p-8 text-center">
               <p className="text-gray-600">No waitlist entries yet.</p>
             </div>
           ) : (
-            <>
-              <div className="bg-white rounded-lg shadow overflow-hidden">
+            // Render waitlist groups
+            waitlistGroups.map((group) => (
+              <div key={group.id} className="mb-12 border p-4 rounded-xl bg-white shadow">
+                <h2 className="font-bold text-lg mb-2">
+                  Waitlist Group #{group.id} ({group.entries.length}/33)
+                </h2>
                 <div className="overflow-x-auto">
-                  <table className="min-w-full divide-y divide-gray-200">
+                  <table className="min-w-full divide-y divide-gray-200 mb-4">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Date
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Name
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Email
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Phone
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Instagram
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Goal
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Commitment
-                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Instagram</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Goal</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Commitment</th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {waitlistEntries.map((entry, index) => (
+                      {group.entries.map((entry) => (
                         <tr key={entry.id} className="hover:bg-gray-50">
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {formatDate(entry.timestamp)}
@@ -317,11 +312,11 @@ setWaitlistEntries(data.entries);   console.log(data.entries)    }
                     </tbody>
                   </table>
                 </div>
+                <span className="block text-xs text-gray-500 italic">
+                  Batch #{group.id} ({group.entries.length}/33 spots filled)
+                </span>
               </div>
-              <div className="mt-4 text-sm text-gray-600">
-                Total waitlist entries: {waitlistEntries.length} / 33
-              </div>
-            </>
+            ))
           )
         ) : (
           // Contact Form Tab
@@ -336,24 +331,12 @@ setWaitlistEntries(data.entries);   console.log(data.entries)    }
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Date
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Name
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Email
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Phone
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Topic
-                        </th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                          Message
-                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Name</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Phone</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Topic</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Message</th>
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
