@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { getWaitlistEntries } from '@/lib/waitlist-storage'
+import { WaitlistEntry } from '@/lib/waitlist-storage'
 import fs from 'fs'
 import path from 'path'
 
@@ -37,4 +37,5 @@ export async function GET() {
       { status: 500 }
     )
   }
+
 }
