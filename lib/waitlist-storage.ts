@@ -21,7 +21,10 @@ export interface WaitlistEntry {
   email: string
   instagram: string
 }
-
+export interface WaitlistGroup {
+  id: number; // 1, 2, 3, ...
+  entries: WaitlistEntry[];
+}
 // In-memory storage (temporary solution)
 let waitlistEntries: WaitlistEntry[] = []
 
@@ -31,12 +34,19 @@ export function getWaitlistEntries(): WaitlistEntry[] {
   return [...waitlistEntries]
 }
 
-export function addWaitlistEntry(entry: WaitlistEntry): boolean {
-  if (waitlistEntries.length >= MAX_WAITLIST_SIZE) {
-    return false
+export function addWaitlistEntry(entry: WaitlistEntry): { success: boolean, groupId?: number } {
+  let currentGroup = waitlistGroups[waitlistGroups.length - 1];
+  if (!currentGroup || currentGroup.entries.length >= MAX_WAITLIST_SIZE) {
+    currentGroup = { id: (waitlistGroups.length + 1), entries: [] };
+    waitlistGroups.push(currentGroup);
   }
-  waitlistEntries.push(entry)
-  return true
+  currentGroup.entries.push(entry);
+  return { success: true, groupId: currentGroup.id };
+}
+
+/* Utility: Total count */
+export function getTotalWaitlistCount(): number {
+  return waitlistGroups.reduce((acc, g) => acc + g.entries.length, 0);
 }
 
 export function getWaitlistCount(): number {
@@ -50,3 +60,4 @@ export function getSpotsLeft(): number {
 export function isWaitlistFull(): boolean {
   return waitlistEntries.length >= MAX_WAITLIST_SIZE
 }
+
