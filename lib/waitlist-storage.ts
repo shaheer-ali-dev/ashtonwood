@@ -31,8 +31,36 @@ let waitlistGroups: WaitlistGroup[] = [];
 export const MAX_WAITLIST_SIZE = 33;
 
 // Set from file database
-export function setWaitlistGroups(groups: WaitlistGroup[]) {
-  waitlistGroups = Array.isArray(groups) ? groups : [];
+export function setWaitlistGroups(groups: any[]) {
+  // Normalize incoming payload so each element is a WaitlistGroup with an entries array
+  if (!Array.isArray(groups)) {
+    waitlistGroups = [];
+    return;
+  }
+
+  const normalized: WaitlistGroup[] = groups.map((el, idx) => {
+    // If element already looks like a group with an entries array, keep it
+    if (el && Array.isArray(el.entries)) {
+      // Ensure entries are objects and return a proper typed group
+      return {
+        id: typeof el.id === 'number' ? el.id : idx + 1,
+        entries: el.entries.filter((e: any) => e && typeof e === 'object') as WaitlistEntry[],
+      };
+    }
+
+    // If element looks like an entry (has timestamp or email), wrap it into a single-entry group
+    if (el && typeof el === 'object') {
+      return {
+        id: typeof el.id === 'number' ? el.id : idx + 1,
+        entries: [el as WaitlistEntry],
+      };
+    }
+
+    // fallback (skip invalid elements)
+    return { id: idx + 1, entries: [] };
+  });
+
+  waitlistGroups = normalized;
 }
 
 // Main getter for batches
@@ -78,6 +106,6 @@ export function getBatchCount(): number {
 
 // Overall entry count
 export function getTotalWaitlistCount(): number {
-  return waitlistGroups.reduce((sum, group) => sum + group.entries.length, 0);
+  return waitlistGroups.reduce((sum, group) => sum + (Array.isArray(group.entries) ? group.entries.length : 0), 0);
 }
 

@@ -9,6 +9,7 @@ interface Question {
   options?: string[]
   placeholder?: string
   required?: boolean
+  multiple?: boolean
 }
 
 const questions: Question[] = [
@@ -21,8 +22,10 @@ const questions: Question[] = [
       'Muscle Gain (bulk)',
       'Recomposition (tone)',
       'Improve flexibility/mobility',
-      'Event/Sport-specific training',
+      'Event/Sport-specific training'
+      
     ],
+      multiple: true, // <-- add this
     required: true,
   },
   {
@@ -35,7 +38,7 @@ const questions: Question[] = [
   {
     id: 'guardian',
     type: 'guardian',
-    question: 'If under 18, do you have your guardians permission?',
+    question: 'If under 18, do you have your guardian\'s permission?',
     options: ['Yes', 'No', 'Not under 18'],
     required: true,
   },
@@ -56,21 +59,21 @@ const questions: Question[] = [
   {
     id: 'seriousness',
     type: 'scale',
-    question: 'On a scale of 1-10, how serious are you about unlocking your full baddie potential?',
+    question: 'On a scale of 1-10, how serious are you about unlocking your full potential?',
     placeholder: '',
     required: true,
   },
   {
     id: 'commitment',
     type: 'yes-no',
-    question: 'My online coaching requires a financial commitment, are you ready to invest in yourself? (Custom workouts, personalized nutrition, weekly check-ins, habit tracking, 1:1 messaging with me)',
+    question: 'My online coaching requires a financial\n commitment, are  you ready to invest in yourself? \n(Personalized workouts, personalized nutrition,  1-3 check-in\n days per week, all-around habit tracking, 1:1 direct messaging with me)',
     options: ["Yes I'm ready to commit", 'No I am not ready'],
     required: true,
   },
   {
     id: 'experience',
     type: 'textarea',
-    question: 'What do you want to get most from this experience? How do you imagine feeling once you\'ve built new habits and the confidence you deserve?',
+    question: 'What do you want to get most from this experience?\n How do you imagine feeling once you\'ve built new \nhabits and the confidence you deserve?',
     placeholder: '',
     required: true,
   },
@@ -105,9 +108,9 @@ const questions: Question[] = [
   {
     id: 'instagram',
     type: 'text',
-    question: 'What is your Instagram handle?',
+    question: 'What is your Instagram handle? (optional)',
     placeholder: '',
-    required: true,
+    required: false,
   },
 ]
 
@@ -135,20 +138,79 @@ export default function WaitlistPage() {
     setErrors({})
   }, [currentStep])
 
-  const handleAnswer = (value: any) => {
-    setAnswers((prev) => ({
-      ...prev,
-      [currentQuestion.id]: value,
-    }))
-    // Clear error when user provides an answer
-    if (errors[currentQuestion.id]) {
-      setErrors((prev) => {
-        const newErrors = { ...prev }
-        delete newErrors[currentQuestion.id]
-        return newErrors
-      })
+  // Helper to validate a single question using a provided answers object
+  const validateAnswersForQuestion = (question: Question, answersObj: Record<string, any>) => {
+    if (!question.required) return true
+
+    if (question.type === 'name') {
+      return Boolean(answersObj['firstName'] && answersObj['lastName'])
     }
+
+    const answer = answersObj[question.id]
+    if (!answer) return false
+    if (Array.isArray(answer) && answer.length === 0) return false
+    if (typeof answer === 'string' && answer.trim() === '') return false
+    return true
   }
+
+  const handleAnswer = (value: any, immediateNext = false) => {
+  const isMulti = currentQuestion.multiple === true;
+  const qid = currentQuestion.id;
+
+  setAnswers((prev) => {
+    let next = { ...prev };
+
+    // MULTI-SELECT HANDLING
+    if (isMulti) {
+      const existing = Array.isArray(prev[qid]) ? prev[qid] : [];
+
+      if (existing.includes(value)) {
+        // remove selected
+        next[qid] = existing.filter((v) => v !== value);
+      } else {
+        // add selected
+        next[qid] = [...existing, value];
+      }
+
+    } else {
+      next[qid] = value;
+    }
+
+    // clear errors
+    if (errors[qid]) {
+      setErrors((prevErr) => {
+        const updated = { ...prevErr };
+        delete updated[qid];
+        return updated;
+      });
+    }
+
+    // auto-next only for single-select questions
+    if (immediateNext && !isMulti) {
+      const isValid = validateAnswersForQuestion(currentQuestion, next);
+
+      if (isValid) {
+        if (currentStep < questions.length - 1) setCurrentStep((p) => p + 1);
+        else handleSubmit();
+      } else {
+        setErrors((prevErr) => ({
+          ...prevErr,
+          [qid]:
+            currentQuestion.type === "textarea" ||
+            currentQuestion.type === "text" ||
+            currentQuestion.type === "email" ||
+            currentQuestion.type === "phone" ||
+            currentQuestion.type === "scale"
+              ? "Please fill in all the fields"
+              : "Select an option to continue",
+        }));
+      }
+    }
+
+    return next;
+  });
+};
+
 
   const validateCurrentStep = (): boolean => {
     if (currentQuestion.required) {
@@ -224,6 +286,70 @@ export default function WaitlistPage() {
     }
   }
 
+  // Render options in two-column rows (same design as QuestionnaireSection)
+ const renderOptionsHardCoded = () => {
+    if (!currentQuestion.options) return null
+    const options = currentQuestion.options
+    const rows = []
+
+    for (let i = 0; i < options.length; i += 2) {
+      const first = options[i]
+      const second = options[i + 1] // may be undefined
+      rows.push(
+        <div key={i} className={`flex justify-center gap-4 mb-4`}>
+          <button
+            type="button"
+            onClick={() => handleAnswer(first, !currentQuestion.multiple)}
+            className={`px-6 py-4 rounded-[30px] border-2 text-center font-bold w-[350px] ${
+  // choose selected or unselected classes explicitly — previous code returned a boolean
+  (Array.isArray(answers[currentQuestion.id])
+    ? answers[currentQuestion.id].includes(first)
+    : answers[currentQuestion.id] === first)
+    ? 'bg-white border-[#5A5A5A] text-gray-900 shadow-sm ring-1 ring-[#E6E7E9]'
+    : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
+}`}
+
+          >
+            {first}
+          </button>
+          {second && (
+            <button
+              type="button"
+              onClick={() => handleAnswer(second, !currentQuestion.multiple)}
+              className={`px-6 py-4 rounded-[30px] border-2 text-center font-bold w-[350px] ${
+                (Array.isArray(answers[currentQuestion.id])
+                  ? answers[currentQuestion.id].includes(second)
+                  : answers[currentQuestion.id] === second)
+                  ? 'bg-white border-[#5A5A5A] text-gray-900 shadow-sm ring-1 ring-[#E6E7E9]'
+                  : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
+              }`}
+
+            >
+              {second}
+            </button>
+          )}
+        </div>
+      )
+    }
+
+    return rows
+  }
+
+  const handleNameChange = (field: 'firstName' | 'lastName', value: string) => {
+    setAnswers(prev => ({
+      ...prev,
+      [field]: value
+    }))
+    
+    if (errors[currentQuestion.id]) {
+      setErrors(prev => {
+        const updated = { ...prev }
+        delete updated[currentQuestion.id]
+        return updated
+      })
+    }
+  }
+
   const renderInput = () => {
     const value = answers[currentQuestion.id] || ''
     const hasError = !!errors[currentQuestion.id]
@@ -235,6 +361,7 @@ export default function WaitlistPage() {
           <input
             key={currentQuestion.id}
             type={currentQuestion.type}
+            // type={currentQuestion.multiple ? "checkbox" : "radio"}
             value={value}
             onChange={(e) => handleAnswer(e.target.value)}
             placeholder={currentQuestion.placeholder}
@@ -246,85 +373,47 @@ export default function WaitlistPage() {
         )
 
       case 'name':
-        const firstName = answers['firstName'] || ''
-        const lastName = answers['lastName'] || ''
-        return (
-          <div className="grid grid-cols-2 gap-4">
-            <input
-              key="firstName"
-              type="text"
-              value={firstName}
-              onChange={(e) => {
-                const newFirstName = e.target.value
-                setAnswers((prev) => ({
-                  ...prev,
-                  firstName: newFirstName,
-                  name: `${newFirstName} ${prev.lastName || ''}`.trim()
-                }))
-                if (errors[currentQuestion.id]) {
-                  setErrors((prev) => {
-                    const newErrors = { ...prev }
-                    delete newErrors[currentQuestion.id]
-                    return newErrors
-                  })
-                }
-              }}
-              placeholder="First Name"
-              autoComplete="given-name"
-              className={`w-full px-4 py-3 rounded-lg border bg-white text-gray-900 ${
-                hasError ? 'border-[#5A5A5A]' : 'border-gray-300'
-              } focus:outline-none focus:ring-2 focus:ring-[#5A5A5A] focus:border-transparent`}
-            />
-            <input
-              key="lastName"
-              type="text"
-              value={lastName}
-              onChange={(e) => {
-                const newLastName = e.target.value
-                setAnswers((prev) => ({
-                  ...prev,
-                  lastName: newLastName,
-                  name: `${prev.firstName || ''} ${newLastName}`.trim()
-                }))
-                if (errors[currentQuestion.id]) {
-                  setErrors((prev) => {
-                    const newErrors = { ...prev }
-                    delete newErrors[currentQuestion.id]
-                    return newErrors
-                  })
-                }
-              }}
-              placeholder="Last Name"
-              autoComplete="family-name"
-              className={`w-full px-4 py-3 rounded-lg border bg-white text-gray-900 ${
-                hasError ? 'border-[#5A5A5A]' : 'border-gray-300'
-              } focus:outline-none focus:ring-2 focus:ring-[#5A5A5A] focus:border-transparent`}
-            />
-          </div>
-        )
+  return (
+    <div className="grid grid-cols-2 gap-4">
+      <input
+        type="text"
+        value={answers.firstName || ''}
+        onChange={e => handleNameChange('firstName', e.target.value)}
+        placeholder="First Name"
+        className={`w-full px-4 py-3 rounded-lg border bg-white text-gray-900 ${
+          hasError ? 'border-[#5A5A5A]' : 'border-gray-300'
+        }`}
+      />
+
+      <input
+        type="text"
+        value={answers.lastName || ''}
+        onChange={e => handleNameChange('lastName', e.target.value)}
+        placeholder="Last Name"
+        className={`w-full px-4 py-3 rounded-lg border bg-white text-gray-900 ${
+          hasError ? 'border-[#5A5A5A]' : 'border-gray-300'
+        }`}
+      />
+    </div>
+  )
+
 
       case 'phone':
-        const phoneValue = value || ''
         return (
           <div className="flex gap-2">
-            <select
-              className="px-4 py-3 rounded-lg border border-gray-300 bg-white focus:outline-none focus:ring-2 focus:ring-[#5A5A5A] text-gray-900"
-              defaultValue="+92"
-            >
+            <select className="px-4 py-3 rounded-lg border border-gray-300 bg-white text-gray-900">
               <option value="+92">🇵🇰 +92</option>
               <option value="+1">🇺🇸 +1</option>
               <option value="+44">🇬🇧 +44</option>
             </select>
             <input
-              key={currentQuestion.id}
               type="tel"
-              value={phoneValue}
+              value={value}
               onChange={(e) => handleAnswer(e.target.value)}
               placeholder={currentQuestion.placeholder}
-              autoComplete="tel"
               className={`flex-1 px-4 py-3 rounded-lg border bg-white text-gray-900 ${
                 hasError ? 'border-[#5A5A5A]' : 'border-gray-300'
-              } focus:outline-none focus:ring-2 focus:ring-[#5A5A5A] focus:border-transparent`}
+              }`}
             />
           </div>
         )
@@ -332,7 +421,6 @@ export default function WaitlistPage() {
       case 'textarea':
         return (
           <textarea
-            key={currentQuestion.id}
             value={value}
             onChange={(e) => handleAnswer(e.target.value)}
             placeholder={currentQuestion.placeholder}
@@ -345,115 +433,31 @@ export default function WaitlistPage() {
 
       case 'scale':
         return (
-          <input
-            key={currentQuestion.id}
-            type="range"
-            min="1"
-            max="10"
-            value={value || 1}
-            onChange={(e) => handleAnswer(e.target.value)}
-            className="w-full h-3 bg-gray-200 rounded-lg accent-[#5A5A5A]"
-          />
+          <div className="w-full">
+  <input
+    type="range"
+    min="1"
+    max="10"
+    value={value || 1}
+    onChange={(e) => handleAnswer(e.target.value)}
+    className="w-full h-3 bg-gray-200 rounded-lg accent-[#5A5A5A]"
+  />
+
+  <div className="flex justify-between text-xs mt-2 text-gray-700">
+    {[1,2,3,4,5,6,7,8,9,10].map(num => (
+      <span key={num}>{num}</span>
+    ))}
+  </div>
+</div>
+
         )
 
       case 'multiple-choice':
       case 'age':
-      case 'gender':
       case 'yes-no':
       case 'guardian':
-        const selected = answers[currentQuestion.id] || (currentQuestion.type === 'multiple-choice' ? [] : '')
-        const isSelected = (option: string) => {
-          if (currentQuestion.type === 'multiple-choice') {
-            return Array.isArray(selected) && selected.includes(option)
-          }
-          return selected === option
-        }
-
-        const handleOptionClick = (option: string) => {
-          if (currentQuestion.type === 'multiple-choice') {
-            const current = Array.isArray(selected) ? selected : []
-            if (current.includes(option)) {
-              handleAnswer(current.filter((o) => o !== option))
-            } else {
-              handleAnswer([...current, option])
-            }
-          } else {
-            handleAnswer(option)
-          }
-        }
-
-        const getLayoutClass = () => {
-          if (currentQuestion.type === 'age') return 'grid grid-cols-2 gap-3'
-          if (currentQuestion.type === 'gender') {
-            return 'space-y-3'
-          }
-          if (currentQuestion.type === 'guardian') return 'space-y-3'
-          if (currentQuestion.type === 'yes-no') return 'grid grid-cols-2 gap-3'
-          return 'space-y-3'
-        }
-
-        const getGenderLayout = () => {
-          if (currentQuestion.type === 'gender') {
-            return (
-              <>
-                <div className="grid grid-cols-2 gap-3 mb-3">
-                  {currentQuestion.options?.slice(0, 2).map((option) => (
-                    <button
-                      key={option}
-                      type="button"
-                      onClick={() => handleOptionClick(option)}
-                      className={`w-full px-6 py-4 rounded-lg border-2 text-left transition-all font-medium ${
-                        isSelected(option)
-                          ? 'bg-white border-[#5A5A5A] text-gray-900'
-                          : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
-                      }`}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-                {currentQuestion.options?.slice(2).map((option) => (
-                  <button
-                    key={option}
-                    type="button"
-                    onClick={() => handleOptionClick(option)}
-                    className={`w-full px-6 py-4 rounded-lg border-2 text-left transition-all font-medium ${
-                      isSelected(option)
-                        ? 'bg-white border-[#5A5A5A] text-gray-900'
-                        : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
-                    }`}
-                  >
-                    {option}
-                  </button>
-                ))}
-              </>
-            )
-          }
-          return null
-        }
-
-        if (currentQuestion.type === 'gender') {
-          return <div>{getGenderLayout()}</div>
-        }
-
-        return (
-          <div className={getLayoutClass()}>
-            {currentQuestion.options?.map((option) => (
-              <button
-                key={option}
-                type="button"
-                onClick={() => handleOptionClick(option)}
-                className={`w-full px-6 py-4 rounded-lg border-2 text-left transition-all font-medium ${
-                  isSelected(option)
-                    ? 'bg-white border-[#5A5A5A] text-gray-900'
-                    : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
-                }`}
-              >
-                {option}
-              </button>
-            ))}
-          </div>
-        )
+      case 'gender':
+        return renderOptionsHardCoded()
 
       default:
         return null
@@ -471,8 +475,8 @@ export default function WaitlistPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-4 heading-font">You're on the waitlist!</h1>
-            <p className="text-lg text-gray-600 mb-6 normal-font">
+            <h1 className="text-3xl font-bold text-black mb-4 heading-font">You're on the waitlist!</h1>
+            <p className="text-lg text-black mb-6 normal-font">
               Congratulations! You've secured your spot in this exclusive special offer.
               {spotsLeft !== null && spotsLeft > 0 && (
                 <span className="block mt-2 font-semibold text-[#5A5A5A]">
@@ -480,7 +484,7 @@ export default function WaitlistPage() {
                 </span>
               )}
             </p>
-            <p className="text-gray-600 normal-font mb-8">
+            <p className="text-black normal-font mb-8">
               We'll contact you soon with next steps. Check your email for confirmation!
             </p>
             <a
@@ -506,11 +510,11 @@ export default function WaitlistPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
               </svg>
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-4 heading-font">Waitlist Full</h1>
-            <p className="text-lg text-gray-600 mb-6 normal-font">
+            <h1 className="text-3xl font-bold text-black mb-4 heading-font">Waitlist Full</h1>
+            <p className="text-lg text-black mb-6 normal-font">
               Sorry, all 33 spots have been filled. This exclusive offer is now closed.
             </p>
-            <p className="text-gray-600 normal-font mb-8">
+            <p className="text-black normal-font mb-8">
               Stay tuned for future opportunities by following us on social media!
             </p>
             <a
@@ -536,8 +540,8 @@ export default function WaitlistPage() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h1 className="text-3xl font-bold text-gray-900 mb-4 heading-font">Oops! Something went wrong</h1>
-            <p className="text-lg text-gray-600 mb-8 normal-font">
+            <h1 className="text-3xl font-bold text-black mb-4 heading-font">Oops! Something went wrong</h1>
+            <p className="text-lg text-black mb-8 normal-font">
               We couldn't submit your application. Please try again.
             </p>
             <button
@@ -575,7 +579,7 @@ export default function WaitlistPage() {
         <h2 className="text-4xl heading-font md:text-5xl font-bold text-[#5A5A5A] mb-6 text-center">
           Join the Waitlist
         </h2>
-        <p className="text-center text-gray-600 mb-12 normal-font text-lg">
+        <p className="text-center text-black mb-12 normal-font text-lg">
           Limited to 33 people only - Don't miss this exclusive training opportunity!
         </p>
 
@@ -591,7 +595,7 @@ export default function WaitlistPage() {
 
         {/* Question */}
         <div className="mb-8">
-          <h3 className="text-xl normal-font md:text-2xl font-bold text-gray-900 mb-8 text-center">
+          <h3 className="text-xl normal-font md:text-2xl font-bold text-black mb-8 text-center whitespace-pre-line">
             {currentQuestion.question}
           </h3>
 
@@ -617,10 +621,10 @@ export default function WaitlistPage() {
             type="button"
             onClick={handlePrevious}
             disabled={currentStep === 0}
-            className={`px-8 py-4 rounded-lg normal-font font-semibold text-gray-900 transition-all ${
+            className={`px-8 py-4 rounded-lg normal-font font-semibold text-black transition-all ${
               currentStep === 0
-                ? 'opacity-50 cursor-not-allowed bg-white border-2 border-gray-300'
-                : 'bg-white border-2 border-black hover:bg-gray-50'
+                ? 'opacity-50 cursor-not-allowed bg-white border-2 border-black'
+                : 'bg-white border-2 border-black hover:bg-black'
             }`}
           >
             ← Previous

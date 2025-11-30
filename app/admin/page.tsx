@@ -120,8 +120,8 @@ export default function AdminPage() {
 
   // Calculate total filled spots for stats banner
   const totalFilled = waitlistGroups.reduce(
-    (sum, group) => sum + group.entries.length, 0
-  );
+      (sum, group) => sum + (Array.isArray(group.entries) ? group.entries.length : 0), 0
+    );
 
   // Login Form
   if (!isAuthenticated) {
@@ -221,7 +221,7 @@ export default function AdminPage() {
           </div>
           <div className="bg-white rounded-lg shadow p-6">
             <div className="text-sm font-medium text-gray-500">Available</div>
-            <div className="mt-2 text-3xl font-bold text-blue-600">{33 - (waitlistGroups[waitlistGroups.length - 1]?.entries.length || 0)}</div>
+            <div className="mt-2 text-3xl font-bold text-blue-600">{33 - (Array.isArray(waitlistGroups[waitlistGroups.length - 1]?.entries) ? waitlistGroups[waitlistGroups.length - 1].entries.length : 0)}</div>
           </div>
         </div>
 
@@ -266,7 +266,7 @@ export default function AdminPage() {
             waitlistGroups.map((group) => (
               <div key={group.id} className="mb-12 border p-4 rounded-xl bg-white shadow">
                 <h2 className="font-bold text-lg mb-2">
-                  Waitlist Group #{group.id} ({group.entries.length}/33)
+                  Waitlist Group #{group.id} ({(Array.isArray(group.entries) ? group.entries.length : 0)}/33)
                 </h2>
                 <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200 mb-4">
@@ -282,7 +282,7 @@ export default function AdminPage() {
                       </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                      {group.entries.map((entry) => (
+                      {(Array.isArray(group.entries) ? group.entries : []).map((entry) => (
                         <tr key={entry.id} className="hover:bg-gray-50">
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {formatDate(entry.timestamp)}
@@ -313,7 +313,7 @@ export default function AdminPage() {
                   </table>
                 </div>
                 <span className="block text-xs text-gray-500 italic">
-                  Batch #{group.id} ({group.entries.length}/33 spots filled)
+                  Batch #{group.id} ({(Array.isArray(group.entries) ? group.entries.length : 0)}/33 spots filled)
                 </span>
               </div>
             ))

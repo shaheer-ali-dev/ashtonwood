@@ -15,7 +15,7 @@ interface Question {
   options?: string[]
   placeholder?: string
   required?: boolean
-  multiple?:boolean
+  multiple?: boolean
 }
 
 const questions: Question[] = [
@@ -72,14 +72,14 @@ const questions: Question[] = [
   {
     id: 'commitment',
     type: 'yes-no',
-    question: 'My online coaching requires a financial commitment, are you ready to invest in yourself? (Custom workouts, personalized nutrition, weekly check-ins, habit tracking, 1:1 messaging with me)',
+    question: 'My online coaching requires a financial\n commitment, are  you ready to invest in yourself? \n(Personalized workouts, personalized nutrition,  1-3 check-in\n days per week, all-around habit tracking, 1:1 direct messaging with me)',
     options: ["Yes I'm ready to commit", 'No I am not ready'],
     required: true,
   },
   {
     id: 'experience',
     type: 'textarea',
-    question: 'What do you want to get most from this experience? How do you imagine feeling once you\'ve built new habits and the confidence you deserve?',
+    question: 'What do you want to get most from this experience?\n How do you imagine feeling once you\'ve built new \nhabits and the confidence you deserve?',
     placeholder: '',
     required: true,
   },
@@ -116,7 +116,7 @@ const questions: Question[] = [
     type: 'text',
     question: 'What is your Instagram handle?',
     placeholder: '',
-    required: true,
+    required: false,
   },
 ]
 
@@ -132,32 +132,71 @@ export default function QuestionnaireSection() {
     setErrors({})
   }, [currentStep])
 
- const handleAnswer = (value: any) => {
+// Validate a single question against a given answers object (helps avoid
+// races when advancing immediately after setting state).
+const validateAnswersForQuestion = (question: Question, answersObj: Record<string, any>) => {
+  if (!question.required) return true
+
+  if (question.type === 'name') {
+    return Boolean(answersObj['firstName'] && answersObj['lastName'])
+  }
+
+  const answer = answersObj[question.id]
+  if (!answer) return false
+  if (Array.isArray(answer) && answer.length === 0) return false
+  if (typeof answer === 'string' && answer.trim() === '') return false
+  return true
+}
+
+ const handleAnswer = (value: any, immediateNext = false) => {
   if (currentQuestion.multiple) {
     setAnswers(prev => {
-      const existing = prev[currentQuestion.id] || []
+      // normalize previous value for this question into an array
+      const existing: any[] = Array.isArray(prev[currentQuestion.id]) ? prev[currentQuestion.id] : []
 
-      // Toggle selection
+      // Toggle selection — make the filter callback types explicit to satisfy TS
       const newArray = existing.includes(value)
-        ? existing.filter(v => v !== value)
+        ? existing.filter((v: any) => v !== value)
         : [...existing, value]
 
       return { ...prev, [currentQuestion.id]: newArray }
     })
 
+    // don't auto-clear errors for multi-select here; user can toggle multiple
     return // don't clear errors yet
   }
 
-  // Normal single-select
-  setAnswers(prev => ({ ...prev, [currentQuestion.id]: value }))
+  // Normal single-select: update answers and optionally try to advance using
+  // the new answers object to avoid needing a second click.
+  setAnswers(prev => {
+    const next = { ...prev, [currentQuestion.id]: value }
 
-  if (errors[currentQuestion.id]) {
-    setErrors(prev => {
-      const newErrors = { ...prev }
-      delete newErrors[currentQuestion.id]
-      return newErrors
-    })
-  }
+    // Clear any previous error for this question since user set a new value.
+    if (errors[currentQuestion.id]) {
+      setErrors(prevErr => {
+        const updated = { ...prevErr }
+        delete updated[currentQuestion.id]
+        return updated
+      })
+    }
+
+    if (immediateNext) {
+      const isValid = validateAnswersForQuestion(currentQuestion, next)
+      if (isValid) {
+        if (currentStep < questions.length - 1) setCurrentStep(s => s + 1)
+        else redirectToStripe()
+      } else {
+        setErrors(prevErr => ({
+          ...prevErr,
+          [currentQuestion.id]: ['textarea', 'text', 'email', 'phone', 'scale'].includes(currentQuestion.type)
+            ? 'Please fill in all the fields'
+            : 'Select an option to continue',
+        }))
+      }
+    }
+
+    return next
+  })
 }
 
 
@@ -207,14 +246,13 @@ export default function QuestionnaireSection() {
         <div key={i} className={`flex justify-center gap-4 mb-4`}>
           <button
             type="button"
-onClick={() => {
-  handleAnswer(first)
-  if (!currentQuestion.multiple) handleNext()
-}}            className={`px-6 py-4 rounded-[30px] border-2 text-center font-bold w-[350px] ${
-currentQuestion.multiple
-  ? answers[currentQuestion.id]?.includes(first)
-  : answers[currentQuestion.id] === first
-    ? 'bg-white border-[#5A5A5A] text-gray-900'
+            onClick={() => handleAnswer(first, !currentQuestion.multiple)}
+            className={`px-6 py-4 rounded-[30px] border-2 text-center font-bold w-[350px] ${
+  // choose selected or unselected classes explicitly — previous code returned a boolean
+  (Array.isArray(answers[currentQuestion.id])
+    ? answers[currentQuestion.id].includes(first)
+    : answers[currentQuestion.id] === first)
+    ? 'bg-white border-[#5A5A5A] text-gray-900 shadow-sm ring-1 ring-[#E6E7E9]'
     : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
 }`}
 
@@ -224,12 +262,14 @@ currentQuestion.multiple
           {second && (
             <button
               type="button"
-              onClick={() => handleAnswer(second)}
+              onClick={() => handleAnswer(second, !currentQuestion.multiple)}
               className={`px-6 py-4 rounded-[30px] border-2 text-center font-bold w-[350px] ${
-  answers[currentQuestion.id] === second
-    ? 'bg-white border-[#5A5A5A] text-gray-900'
-    : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
-}`}
+                (Array.isArray(answers[currentQuestion.id])
+                  ? answers[currentQuestion.id].includes(second)
+                  : answers[currentQuestion.id] === second)
+                  ? 'bg-white border-[#5A5A5A] text-gray-900 shadow-sm ring-1 ring-[#E6E7E9]'
+                  : 'bg-white border-gray-300 text-gray-700 hover:border-gray-400'
+              }`}
 
             >
               {second}
@@ -388,7 +428,7 @@ const handleNameChange = (field: 'firstName' | 'lastName', value: string) => {
 
         {/* Question */}
         <div className="mb-8">
-          <h3 className="text-xl normal-font md:text-2xl font-bold text-gray-900 mb-8 text-center">
+          <h3 className="text-xl normal-font md:text-2xl font-bold text-gray-900 mb-8 text-center whitespace-pre-line">
             {currentQuestion.question}
           </h3>
 
@@ -426,7 +466,6 @@ const handleNameChange = (field: 'firstName' | 'lastName', value: string) => {
     </section>
   )
 }
-
 
 
 

@@ -17,7 +17,7 @@ export default function AppAccessSection() {
   <div className="relative w-[600px] h-[500px] md:w-[750px] md:h-[600px] flex items-center justify-center">
     
     <img
-      src="/app-screenshot.png"
+      src="/app-screenshot-transparent.png"
       alt="App Watch mock"
       className="w-[200px] md:w-[260px] object-contain z-30"
     />
