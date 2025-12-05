@@ -35,7 +35,7 @@ export default function FeaturesSection() {
       title: 'A Lifestyle You Can Maintain:',
       // title: 'A LIFESTYLE YOU CAN MAINTAIN:',
       items: [
-        'Nutrition guidance tailored to your exact goals, making eating clean simple and sustainable.',
+        'Nutrition built around your favorite foods, with guidance tailored to your exact goals, making clean eating fun, simple, and sustainable.',
         'Daily habit-building systems designed to stick with you for life — no more starting over.',
       ],
     },
@@ -105,3 +105,4 @@ className="relative bg-white rounded-lg border border-black p-6 min-h-[240px] sh
   )
 
 }
+
