@@ -9,7 +9,8 @@ import TestimonialsSection from '@/components/TestimonialsSection'
 import AppAccessSection from '@/components/AppAccessSection'
 import Footer from '@/components/Footer'
 import ScrollToTopButton from '@/components/ScrollToTopButton'
-
+import PricingSection from '@/components/pricing'
+import Agreement from '@/components/Agreement_v3'
 export default function Home() {
   return (
     <main className="min-h-screen">
@@ -18,6 +19,7 @@ export default function Home() {
       <QuestionnaireSection />
       <FeaturesSection />
       <TestimonialsSection />
+      <PricingSection />
       <AppAccessSection />
       <Footer />
       <ScrollToTopButton />

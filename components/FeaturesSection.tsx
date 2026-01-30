@@ -43,7 +43,13 @@ export default function FeaturesSection() {
       title: 'Support You Can Count On:',
       // title: 'SUPPORT YOU CAN COUNT ON:',
       items: ['Direct 1:1 communication with your coach, Ashton, for accountability, motivation, and real guidance whenever you need it.'],
-    },
+    },{
+    title:'Real Coaching.',
+    // title: 'REAL COACHING. REAL DECISIONS. NO AI-GENERATED PLANS.',
+    items: [
+      'Every program is personally designed and reviewed by an experienced coach — never auto-generated or AI-built.',
+      'Your training, nutrition, and progression are manually adjusted based on your body, performance, and real-world feedback.',
+    ],},
   ]
 
   return (
@@ -55,7 +61,7 @@ export default function FeaturesSection() {
           WHAT YOU'LL GAIN WITH 1:1 COACHING:
         </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-6 mb-12">
           {features.map((feature, index) => (
             <div
               key={index}

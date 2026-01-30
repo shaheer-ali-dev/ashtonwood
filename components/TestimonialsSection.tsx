@@ -14,10 +14,8 @@ export default function TestimonialsSection() {
   ]
 
   const transformations = [
-    '/images/trans1.jpg',
-    '/images/trans2.jpg',
-    '/images/trans3.jpg',
-    '/images/trans4.jpg',
+    'transformation.jpeg',
+    
   ]
 
   // Slides: testimonials -> 2 cards per slide; transformations -> 3 images per slide
@@ -97,19 +95,26 @@ export default function TestimonialsSection() {
           <div className="w-full md:w-3/4 overflow-hidden">
             {/* slides wrapper */}
             <div
-              className="flex transition-transform duration-500"
-              style={{
-                width: `${testimonialSlides.length * 100}%`,
-                transform: `translateX(-${activeTestimonial * (100 / Math.max(1, testimonialSlides.length))}%)`,
-              }}
-            >
+  className={`flex transition-transform duration-500 ${
+    testimonialSlides.length === 1 ? 'justify-center' : ''
+  }`}
+  style={
+    testimonialSlides.length === 1
+      ? {}
+      : {
+          width: `${testimonialSlides.length * 100}%`,
+          transform: `translateX(-${activeTestimonial * (100 / testimonialSlides.length)}%)`,
+        }
+  }
+>
+
               {testimonialSlides.map((slide, sIdx) => (
                 <div
                   key={sIdx}
                   // each slide must occupy the visible viewport width
                   className="flex-shrink-0 w-full px-2"
                 >
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="flex grid-cols-1 md:grid-cols-2 gap-6">
                     {slide.map((t, i) => (
                       <div key={i} className="border border-black rounded-lg p-6 bg-white">
                         <p className="normal-font text-sm font-bold text-black leading-relaxed">"{t.quote}"</p>
@@ -161,20 +166,38 @@ export default function TestimonialsSection() {
         <div className="flex flex-col items-center">
           <div className="w-full md:w-3/4 overflow-hidden">
             <div
-              className="flex transition-transform duration-500"
-              style={{
-                width: `${transformSlides.length * 100}%`,
-                transform: `translateX(-${activeTransform * (100 / Math.max(1, transformSlides.length))}%)`,
-              }}
-            >
+  className={`flex transition-transform duration-500 ${
+    transformSlides.length === 1 ? 'justify-center' : ''
+  }`}
+  style={
+    transformSlides.length === 1
+      ? {}
+      : {
+          width: `${transformSlides.length * 100}%`,
+          transform: `translateX(-${activeTransform * (100 / transformSlides.length)}%)`,
+        }
+  }
+>
+
               {transformSlides.map((slide, sIdx) => (
                 <div key={sIdx} className="flex-shrink-0 w-full px-2">
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
+<div
+  className={`gap-6 ${
+    slide.length === 1
+      ? 'flex justify-center'
+      : 'grid grid-cols-1 sm:grid-cols-3'
+  }`}
+>
                     {slide.map((src, i) => (
-                      <div
-                        key={i}
-                        className="rounded-lg overflow-hidden border border-black/10 shadow-sm bg-white h-48 flex items-center justify-center"
-                      >
+                    <div
+  key={i}
+  className={`rounded-lg overflow-hidden border border-black/10 shadow-sm bg-white flex items-center justify-center ${
+    slide.length === 1
+      ? 'w-full max-w-4xl h-96'
+      : 'w-full h-48'
+  }`}
+>
+
                         <img
                           src={src}
                           alt={`transformation-${sIdx}-${i}`}
@@ -189,7 +212,7 @@ export default function TestimonialsSection() {
                     ))}
                     {/* fill empty slots if a slide has fewer than 3 images to keep grid consistent */}
                     {slide.length < 3 &&
-                      Array.from({ length: 3 - slide.length }).map((_, idx) => (
+                      Array.from({ length: 0 }).map((_, idx) => (
                         <div key={`empty-${idx}`} className="rounded-lg border border-black/10 h-48 bg-white" />
                       ))}
                   </div>

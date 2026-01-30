@@ -28,7 +28,7 @@ export interface WaitlistGroup {
 
 // If you use file persistence, always load/save waitlistGroups[] elsewhere!
 let waitlistGroups: WaitlistGroup[] = [];
-export const MAX_WAITLIST_SIZE = 33;
+export const MAX_WAITLIST_SIZE = 125;
 
 // Set from file database
 export function setWaitlistGroups(groups: any[]) {

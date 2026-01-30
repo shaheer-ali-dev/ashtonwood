@@ -24,12 +24,12 @@ export async function GET() {
     const groups = loadAllGroupsFromFile();
     const currentGroup = groups[groups.length - 1] || { entries: [] };
     const filled = currentGroup.entries.length;
-    const spotsLeft = Math.max(0, 33 - filled);
-    const isFull = filled >= 33;
+    const spotsLeft = Math.max(0, 125 - filled);
+    const isFull = filled >= 125;
 
     return NextResponse.json(
       {
-        total: 33,
+        total: 125,
         filled,
         spotsLeft,
         isFull,

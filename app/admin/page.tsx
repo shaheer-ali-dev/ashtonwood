@@ -50,6 +50,14 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [waitlistGroups, setWaitlistGroups] = useState<WaitlistGroup[]>([]);
 
+  // Email modal / form state
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [modalGroupId, setModalGroupId] = useState<number | null>(null);
+  const [emailSubject, setEmailSubject] = useState('');
+  const [emailMessage, setEmailMessage] = useState('');
+  const [sendingEmail, setSendingEmail] = useState(false);
+  const [emailResult, setEmailResult] = useState<string | null>(null);
+
   useEffect(() => {
     async function fetchWaitlists() {
       const res = await fetch('/api/admin/waitlist');
@@ -120,8 +128,71 @@ export default function AdminPage() {
 
   // Calculate total filled spots for stats banner
   const totalFilled = waitlistGroups.reduce(
-      (sum, group) => sum + (Array.isArray(group.entries) ? group.entries.length : 0), 0
-    );
+    (sum, group) => sum + (Array.isArray(group.entries) ? group.entries.length : 0),
+    0
+  );
+
+  // Email modal handlers
+  const openEmailModal = (groupId: number) => {
+    setModalGroupId(groupId);
+    setEmailSubject('');
+    setEmailMessage('');
+    setEmailResult(null);
+    setShowEmailModal(true);
+  };
+
+  const closeEmailModal = () => {
+    setShowEmailModal(false);
+    setModalGroupId(null);
+    setEmailSubject('');
+    setEmailMessage('');
+    setEmailResult(null);
+  };
+
+  const handleSendEmails = async () => {
+    setEmailResult(null);
+
+    if (!emailSubject.trim() || !emailMessage.trim()) {
+      setEmailResult('Subject and message are required.');
+      return;
+    }
+
+    const group = waitlistGroups.find((g) => g.id === modalGroupId);
+    const emails = (group?.entries || [])
+      .map((e) => e.email)
+      .filter((em): em is string => !!em && em.trim().length > 0);
+
+    if (emails.length === 0) {
+      setEmailResult('No emails found for this group.');
+      return;
+    }
+
+    setSendingEmail(true);
+    try {
+      const response = await fetch('/api/admin/send-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ emails, subject: emailSubject, message: emailMessage }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setEmailResult('Email(s) sent successfully.');
+        // optionally close modal after a short delay
+        setTimeout(() => {
+          closeEmailModal();
+        }, 1000);
+      } else {
+        setEmailResult(data.msg || 'Failed to send emails.');
+      }
+    } catch (err) {
+      console.error('Error sending emails:', err);
+      setEmailResult('Failed to send emails.');
+    } finally {
+      setSendingEmail(false);
+    }
+  };
 
   // Login Form
   if (!isAuthenticated) {
@@ -198,9 +269,7 @@ export default function AdminPage() {
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-extrabold text-gray-900">
-            Admin Dashboard
-          </h1>
+          <h1 className="text-3xl font-extrabold text-gray-900">Admin Dashboard</h1>
           <button
             onClick={() => setIsAuthenticated(false)}
             className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
@@ -213,7 +282,7 @@ export default function AdminPage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
           <div className="bg-white rounded-lg shadow p-6">
             <div className="text-sm font-medium text-gray-500">Total Spots in Group</div>
-            <div className="mt-2 text-3xl font-bold text-gray-900">33</div>
+            <div className="mt-2 text-3xl font-bold text-gray-900">125</div>
           </div>
           <div className="bg-white rounded-lg shadow p-6">
             <div className="text-sm font-medium text-gray-500">Filled</div>
@@ -221,7 +290,9 @@ export default function AdminPage() {
           </div>
           <div className="bg-white rounded-lg shadow p-6">
             <div className="text-sm font-medium text-gray-500">Available</div>
-            <div className="mt-2 text-3xl font-bold text-blue-600">{33 - (Array.isArray(waitlistGroups[waitlistGroups.length - 1]?.entries) ? waitlistGroups[waitlistGroups.length - 1].entries.length : 0)}</div>
+            <div className="mt-2 text-3xl font-bold text-blue-600">
+              {125 - (Array.isArray(waitlistGroups[waitlistGroups.length - 1]?.entries) ? waitlistGroups[waitlistGroups.length - 1].entries.length : 0)}
+            </div>
           </div>
         </div>
 
@@ -265,9 +336,21 @@ export default function AdminPage() {
             // Render waitlist groups
             waitlistGroups.map((group) => (
               <div key={group.id} className="mb-12 border p-4 rounded-xl bg-white shadow">
-                <h2 className="font-bold text-lg mb-2">
-                  Waitlist Group #{group.id} ({(Array.isArray(group.entries) ? group.entries.length : 0)}/33)
-                </h2>
+                <div className="flex items-center justify-between mb-2">
+                  <h2 className="font-bold text-lg">
+                    Waitlist Group #{group.id} ({(Array.isArray(group.entries) ? group.entries.length : 0)}/125)
+                  </h2>
+                  <div className="flex items-center space-x-2">
+                    <button
+                      onClick={() => openEmailModal(group.id)}
+                      className="px-3 py-1 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 text-sm"
+                      title="Send bulk email to this group's emails"
+                    >
+                      Bulk Email
+                    </button>
+                  </div>
+                </div>
+
                 <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200 mb-4">
                     <thead className="bg-gray-50">
@@ -313,7 +396,7 @@ export default function AdminPage() {
                   </table>
                 </div>
                 <span className="block text-xs text-gray-500 italic">
-                  Batch #{group.id} ({(Array.isArray(group.entries) ? group.entries.length : 0)}/33 spots filled)
+                  Batch #{group.id} ({(Array.isArray(group.entries) ? group.entries.length : 0)}/125 spots filled)
                 </span>
               </div>
             ))
@@ -366,11 +449,78 @@ export default function AdminPage() {
                   </table>
                 </div>
               </div>
-              <div className="mt-4 text-sm text-gray-600">
-                Total submissions: {submissions.length}
-              </div>
+              <div className="mt-4 text-sm text-gray-600">Total submissions: {submissions.length}</div>
             </>
           )
+        )}
+
+        {/* Email Modal */}
+        {showEmailModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <div
+              className="absolute inset-0 bg-black opacity-40"
+              onClick={closeEmailModal}
+            />
+            <div className="relative bg-white rounded-lg shadow-lg max-w-2xl w-full p-6 z-10">
+              <div className="flex justify-between items-center mb-4">
+                <h3 className="text-lg font-medium">Send Bulk Email - Group #{modalGroupId}</h3>
+                <button
+                  onClick={closeEmailModal}
+                  className="text-gray-500 hover:text-gray-700"
+                  aria-label="Close"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Subject</label>
+                  <input
+                    type="text"
+                    value={emailSubject}
+                    onChange={(e) => setEmailSubject(e.target.value)}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="Email subject"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-700">Message</label>
+                  <textarea
+                    value={emailMessage}
+                    onChange={(e) => setEmailMessage(e.target.value)}
+                    rows={6}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
+                    placeholder="Write your message here..."
+                  />
+                </div>
+
+                {emailResult && (
+                  <div className="text-sm text-gray-700">
+                    {emailResult}
+                  </div>
+                )}
+
+                <div className="flex justify-end space-x-3">
+                  <button
+                    onClick={closeEmailModal}
+                    className="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300"
+                    disabled={sendingEmail}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handleSendEmails}
+                    className="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+                    disabled={sendingEmail}
+                  >
+                    {sendingEmail ? 'Sending...' : 'Send'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>
