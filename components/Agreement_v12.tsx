@@ -59,7 +59,8 @@ This program is non-transferable.
 By signing, you acknowledge that you have read, understood, and agree to these terms in full.`
 
 export default function Agreement() {
-  const sigRef = useRef<SignatureCanvas | null>(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const sigRef = useRef<any>(null)
   const [form, setForm] = useState({ clientName: '', date: '' })
   const [plan, setPlan] = useState<PaymentPlan>(null)
   const [loading, setLoading] = useState(false)
