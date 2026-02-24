@@ -65,7 +65,8 @@ export default function Agreement() {
   const [loading, setLoading] = useState(false)
   const [errors, setErrors] = useState<Record<string, string>>({})
 
-  const clearSignature = () => sigRef.current?.clear()
+  const clearSignature = () => sigRef.current?.clear?.()
+
 
   const drawTextWrapped = (
     ctx: CanvasRenderingContext2D,
@@ -107,13 +108,14 @@ export default function Agreement() {
     try {
       setLoading(true)
 
-      const sigCanvas = sigRef.current!.getCanvas()
+      if (!sigRef.current) return
+      const sigCanvas = sigRef.current.getCanvas()
       const signatureData = sigCanvas.toDataURL('image/png')
 
       const canvas = document.createElement('canvas')
       canvas.width = 1240
       canvas.height = 2400
-      const ctx = canvas.getContext('2d')!
+      const ctx = canvas.getContext('2d'); if (!ctx) return
       ctx.fillStyle = '#fff'
       ctx.fillRect(0, 0, canvas.width, canvas.height)
       ctx.fillStyle = '#000'
@@ -126,7 +128,7 @@ export default function Agreement() {
       ctx.textAlign = 'left'; ctx.font = '15px Arial'
       y = drawTextWrapped(ctx, AGREEMENT_TEXT, 60, y, 1120, 22) + 30
       ctx.font = 'bold 16px Arial'
-      ctx.fillText(`Selected Payment Plan: ${PLAN_LABELS[plan!]}`, 60, y); y += 36
+      ctx.fillText(`Selected Payment Plan: ${PLAN_LABELS[plan as Exclude<PaymentPlan, null>]}`, 60, y); y += 36
       ctx.font = '16px Arial'
       ctx.fillText(`Client Name: ${form.clientName}`, 60, y); y += 28
       ctx.fillText(`Date: ${form.date}`, 60, y); y += 44
@@ -146,7 +148,7 @@ export default function Agreement() {
         })
       } catch (_) { /* non-fatal */ }
 
-      window.location.href = STRIPE_LINKS[plan!]
+      window.location.href = STRIPE_LINKS[plan as Exclude<PaymentPlan, null>]
     } finally {
       setLoading(false)
     }
