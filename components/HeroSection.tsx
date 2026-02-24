@@ -17,14 +17,7 @@ export default function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
 
-      {/* Top Banner - fixed at top */}
-      <div
-        className="absolute top-0 left-0 w-full bg-gradient-to-r from-red-500 via-pink-500 to-purple-500 text-white font-bold py-3 px-6 text-center cursor-pointer hover:opacity-90 transition-opacity duration-300 z-50"
-        onClick={handleWaitlistClick}
-      >
-        {/* 🎉 Join our WAITLIST for an exclusive discount! Click here to claim your special offer! 🚀 */}
-       🎉 JOIN OUR WAITLIST FOR AN EXCLUSIVE DISCOUNT! CLICK HERE TO CLAIM YOUR SPECIAL OFFER! 🚀
-      </div>
+     
 
       {/* Background Image */}
       <div

@@ -343,7 +343,13 @@ const questions: Question[] = [
     placeholder: '',
     required: true,
   },
- 
+  {
+    id: 'avatar',
+    type: 'avatar',
+    question: 'Upload a profile picture (optional)',
+    placeholder: '',
+    required: false,
+  },
 
   {
     id: 'instagram',
@@ -1095,5 +1101,4 @@ export default function WaitlistPage() {
       </div>
     </section>
   )
-
 }
